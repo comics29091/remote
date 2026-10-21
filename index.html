@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Aether S2S — Luyện Justification (bản web)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f2f3f0;
+        --surface: #ffffff;
+        --surface-2: #eef0ea;
+        --ink: #1d2420;
+        --ink-soft: #3c463f;
+        --muted: #66716a;
+        --line: #dde1da;
+        --accent: #d94f04;
+        --accent-strong: #b23f02;
+        --accent-soft: #fdeee2;
+        --good: #177245;
+        --good-bg: #e3f3ea;
+        --bad: #c22525;
+        --bad-bg: #fdecec;
+        --model-bg: #f7f3ea;
+        --model-line: #e3d9c3;
+        --shadow: 0 1px 2px rgba(20, 30, 25, .05), 0 8px 24px rgba(20, 30, 25, .05);
+        --g1: #d94f04; --g2: #0e7a5f; --g3: #b03a5b; --g4: #3366b3; --g5: #8a6d1a; --g6: #4a6b8a;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #101312;
+          --surface: #181d1a;
+          --surface-2: #212723;
+          --ink: #e9edea;
+          --ink-soft: #c6cdc7;
+          --muted: #97a29a;
+          --line: #2c332f;
+          --accent: #ff7a29;
+          --accent-strong: #ffa25e;
+          --accent-soft: #3a2413;
+          --good: #4cc38a;
+          --good-bg: #14301f;
+          --bad: #ff8585;
+          --bad-bg: #3a1717;
+          --model-bg: #23201a;
+          --model-line: #453c2a;
+          --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 16.5px;
+        line-height: 1.62;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 72px; }
+
+      /* ---------- Hero ---------- */
+      .hero { padding: 34px 0 6px; }
+      .hero h1 { font-size: clamp(26px, 4.6vw, 36px); line-height: 1.2; margin: 0 0 8px; font-weight: 800; letter-spacing: -.01em; }
+      .hero h1 .thin { color: var(--accent); }
+      .hero p.sub { margin: 0 0 22px; color: var(--ink-soft); max-width: 62ch; }
+      .stats { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
+      .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 18px; min-width: 132px; box-shadow: var(--shadow); }
+      .stat .num { font-size: 24px; font-weight: 800; line-height: 1.1; }
+      .stat .num small { font-size: 15px; color: var(--muted); font-weight: 600; }
+      .stat .cap { font-size: 13px; color: var(--muted); margin-top: 2px; }
+      .stat.grow { flex: 1 1 220px; display: flex; flex-direction: column; justify-content: center; }
+      .bar { height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-top: 8px; border: 1px solid var(--line); }
+      .bar > i { display: block; height: 100%; width: 0%; background: var(--accent); border-radius: 99px; transition: width .35s ease; }
+      .done-banner { display: none; margin-top: 14px; background: var(--good-bg); border: 1px solid var(--good); color: var(--ink); border-radius: 12px; padding: 12px 16px; font-weight: 500; }
+      .done-banner.show { display: block; }
+
+      /* ---------- Reference panel ---------- */
+      details.ref { margin-top: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+      details.ref summary { cursor: pointer; padding: 14px 18px; font-weight: 700; list-style: none; display: flex; align-items: center; gap: 10px; min-height: 52px; }
+      details.ref summary::-webkit-details-marker { display: none; }
+      details.ref summary .chev { margin-left: auto; transition: transform .2s ease; color: var(--muted); font-size: 14px; }
+      details.ref[open ] summary .chev { transform: rotate(180deg); }
+      .ref-body { padding: 2px 18px 18px; }
+      .ref-body ol { margin: 0; padding-left: 22px; }
+      .ref-body li { margin: 8px 0; }
+      .ref-body li b { color: var(--accent-strong); }
+      .ref-body .tip { margin-top: 12px; color: var(--muted); font-size: 14.5px; }
+
+      /* ---------- Sticky filter bar ---------- */
+      .filterbar { position: sticky; top: 0; z-index: 20; margin: 22px -18px 0; padding: 12px 18px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+      .filterbar .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+      .chip { appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft); border-radius: 999px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 42px; }
+      .chip .cnt { color: var(--muted); font-weight: 500; font-size: 12.5px; margin-left: 4px; }
+      .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+      .chip[aria-pressed="true"] .cnt { color: inherit; opacity: .7; }
+      .chip:focus-visible, button:focus-visible, summary:focus-visible, textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
+      .reset-btn { margin-left: auto; appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 999px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 42px; }
+      .reset-btn:hover { color: var(--bad); border-color: var(--bad); }
+
+      /* ---------- Group headings & cards ---------- */
+      .ghead { margin: 34px 0 4px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+      .ghead h2 { font-size: 20px; margin: 0; font-weight: 800; }
+      .ghead .gcount { color: var(--muted); font-size: 14px; }
+      .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 22px 22px 20px; margin-top: 16px; }
+      .card-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+      .bnum { font-weight: 800; font-size: 17px; }
+      .gtag { font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; color: var(--gc, var(--accent-strong)); background: color-mix(in srgb, var(--gc, var(--accent)) 13%, transparent); }
+      .answered-badge { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--good); display: none; align-items: center; gap: 5px; }
+      .card.answered .answered-badge { display: inline-flex; }
+      .lab { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 14px 0 4px; }
+      .lab:first-of-type { margin-top: 0; }
+      .scenario { margin: 0; color: var(--ink-soft); }
+      .heard { margin: 0; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; }
+      .mcq { margin: 18px 0 6px; font-weight: 700; }
+      .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      @media (max-width: 620px) { .opts { grid-template-columns: 1fr; } .card { padding: 18px 16px; } }
+      .opt { appearance: none; text-align: left; display: flex; gap: 11px; align-items: flex-start; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 13px 14px; font: inherit; font-size: 15.5px; font-weight: 500; cursor: pointer; min-height: 54px; line-height: 1.45; }
+      .opt .letter { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--muted); margin-top: 1px; }
+      .opt:hover:not(:disabled) { border-color: var(--accent); }
+      .opt:disabled { cursor: default; opacity: 1; }
+      .opt.picked-correct { border-color: var(--good); background: var(--good-bg); }
+      .opt.picked-correct .letter { border-color: var(--good); color: var(--good); }
+      .opt.picked-wrong { border-color: var(--bad); background: var(--bad-bg); }
+      .opt.picked-wrong .letter { border-color: var(--bad); color: var(--bad); }
+      .opt.reveal-correct { border-color: var(--good); border-style: dashed; }
+      .opt.reveal-correct .letter { border-color: var(--good); color: var(--good); }
+      .opt.dim { opacity: .55; }
+      .feedback { display: none; margin-top: 14px; border-radius: 10px; padding: 12px 15px; font-size: 15.5px; }
+      .feedback.show { display: block; }
+      .feedback.ok { background: var(--good-bg); border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); }
+      .feedback.no { background: var(--bad-bg); border: 1px solid color-mix(in srgb, var(--bad) 45%, transparent); }
+      .feedback b { display: block; margin-bottom: 2px; }
+      .write-lab { display: block; margin: 20px 0 6px; font-weight: 700; }
+      textarea.just { width: 100%; min-height: 108px; resize: vertical; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; font-size: 15.5px; line-height: 1.55; padding: 12px 14px; }
+      textarea.just::placeholder { color: var(--muted); }
+      .wcount { font-size: 12.5px; color: var(--muted); margin-top: 4px; text-align: right; }
+      .model-btn { margin-top: 12px; appearance: none; border: 1.5px solid var(--accent); color: var(--accent-strong); background: var(--accent-soft); border-radius: 10px; padding: 11px 16px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 48px; display: inline-flex; align-items: center; gap: 8px; }
+      .model-btn .chev { transition: transform .2s ease; font-size: 12px; }
+      .model-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+      .model { display: none; margin-top: 12px; background: var(--model-bg); border: 1px solid var(--model-line); border-radius: 10px; padding: 15px 17px; }
+      .model.show { display: block; }
+      .model .vh { font-weight: 700; margin: 0 0 6px; }
+      .model .vh span { color: var(--muted); font-weight: 600; }
+      .model p.mtext { margin: 0; font-family: "Source Serif 4", Georgia, serif; font-size: 16.5px; line-height: 1.65; }
+
+      footer.note { margin-top: 44px; color: var(--muted); font-size: 14.5px; border-top: 1px solid var(--line); padding-top: 18px; }
+
+      /* ---------- Reset modal ---------- */
+      .modal-veil { display: none; position: fixed; inset: 0; background: rgba(10, 12, 11, .55); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
+      .modal-veil.show { display: flex; }
+      .modal { background: var(--surface); color: var(--ink); border-radius: 14px; max-width: 420px; width: 100%; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+      .modal h3 { margin: 0 0 8px; font-size: 19px; }
+      .modal p { margin: 0 0 20px; color: var(--ink-soft); }
+      .modal .mrow { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+      .modal button { appearance: none; border-radius: 10px; padding: 11px 18px; font: inherit; font-weight: 700; cursor: pointer; min-height: 48px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+      .modal button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Aether S2S — Luyện <span class="thin">Justification</span></h1>
+        <p class="sub">50 bài luyện cho dự án Aether S2S (Outlier): nghe tình huống, chọn <b>verdict</b> đúng, rồi tự viết <b>justification bằng tiếng Anh</b> theo khung 3 nhịp và đối chiếu đáp án mẫu. Đề tự chế để luyện tập — không phải đề thật của Outlier.</p>
+        <div class="stats" role="status" aria-live="polite">
+          <div class="stat"><div class="num"><span id="stAnswered">0</span><small>/50</small></div><div class="cap">Bài đã trả lời</div></div>
+          <div class="stat"><div class="num"><span id="stCorrect">0</span></div><div class="cap">Verdict đúng</div></div>
+          <div class="stat grow"><div class="cap" style="margin:0">Tiến độ toàn bộ</div><div class="bar"><i id="stBar"></i></div></div>
+        </div>
+        <div class="done-banner" id="doneBanner"></div>
+        <details class="ref">
+          <summary>Khung justification 3 nhịp — xem nhanh khi viết <span class="chev">▾</span></summary>
+          <div class="ref-body">
+            <ol>
+              <li><b>Verdict + mức độ:</b> nêu kết luận trước — lỗi thuộc nhóm nào (pronunciation, word choice, register, naturalness, content, audio quality), major hay minor; mẫu đạt thì ghi “No issue”. Ví dụ: <i>“I rated this down for a major pronunciation issue.”</i></li>
+              <li><b>Evidence:</b> đưa bằng chứng cụ thể — mốc thời gian (nếu có) và trích nguyên văn đoạn lỗi: <i>“The speaker says ‘cái bán gỗ’…”</i>. Không có trích dẫn là bài yếu.</li>
+              <li><b>Explanation + bản đúng:</b> giải thích vì sao sai trong tiếng Việt tự nhiên và dạng đúng phải thế nào: <i>“…which changes the meaning. The correct form is ‘cái bàn gỗ này’.”</i></li>
+            </ol>
+            <p class="tip">Khi nghe, rà theo 6 nhóm lỗi: phát âm &amp; dấu thanh · chọn từ &amp; lượng từ · xưng hô (register) · độ tự nhiên &amp; ngữ điệu · nội dung &amp; bám kịch bản · chất lượng âm thanh. Mục tiêu mỗi justification: 3–5 câu, viết trong 2–3 phút.</p>
+          </div>
+        </details>
+      </header>
+
+      <nav class="filterbar" aria-label="Lọc theo nhóm bài">
+        <div class="row" id="chipRow"></div>
+      </nav>
+
+      <main id="list"></main>
+
+      <footer class="note">Lộ trình luyện gợi ý: làm Nhóm 1–2 trước (kỹ thuật chấm lỗi), rồi Nhóm 3–4 (register và độ tự nhiên — hai nhóm dễ mất điểm nhất vì phải giải thích bằng tiếng Anh), cuối cùng Nhóm 5–6 (nội dung và ca đạt/biên — luyện cả việc viết justification cho câu trả lời TỐT). Bài làm trên trang này chỉ giữ trong lúc trang đang mở.</footer>
+    </div>
+
+    <div class="modal-veil" id="resetVeil" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+      <div class="modal">
+        <h3 id="resetTitle">Làm lại từ đầu?</h3>
+        <p>Toàn bộ lựa chọn verdict và phần justification đã viết ở cả 50 bài sẽ bị xoá. Anh chắc chắn muốn bắt đầu vòng luyện mới chứ?</p>
+        <div class="mrow">
+          <button type="button" id="resetCancel">Huỷ</button>
+          <button type="button" class="danger" id="resetConfirm">Xoá và làm lại</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      "use strict";
+      var GROUPS = [
+        { name: "Pronunciation & dấu thanh", short: "Phát âm" },
+        { name: "Word choice & lượng từ", short: "Lượng từ" },
+        { name: "Register & xưng hô", short: "Xưng hô" },
+        { name: "Naturalness & prosody", short: "Tự nhiên" },
+        { name: "Content & bám kịch bản", short: "Nội dung" },
+        { name: "Audio quality & ca đạt / biên", short: "Âm thanh" }
+      ];
+      var NEAR = {
+        "Major pronunciation issue": ["Minor pronunciation issue", "Major word-choice / classifier issue", "Major content issue"],
+        "Minor pronunciation issue": ["Major pronunciation issue", "Minor word-choice issue", "Naturalness / prosody issue"],
+        "Major word-choice / classifier issue": ["Minor word-choice issue", "Major pronunciation issue", "Major register issue"],
+        "Minor word-choice issue": ["Major word-choice / classifier issue", "Minor pronunciation issue", "Naturalness / prosody issue"],
+        "Major register issue": ["Minor register issue", "Naturalness / prosody issue", "Minor word-choice issue"],
+        "Minor register issue": ["Major register issue", "Naturalness / prosody issue", "Minor word-choice issue"],
+        "Naturalness / prosody issue": ["Minor pronunciation issue", "Minor word-choice issue", "Minor content issue"],
+        "Major content issue": ["Minor content issue", "Major word-choice / classifier issue", "Major audio-quality issue"],
+        "Minor content issue": ["Major content issue", "Naturalness / prosody issue", "Minor word-choice issue"],
+        "Major audio-quality issue": ["Minor audio-quality issue", "Major content issue", "Naturalness / prosody issue"],
+        "Minor audio-quality issue": ["Major audio-quality issue", "Minor content issue", "Naturalness / prosody issue"],
+        "No issue — acceptable": ["Minor pronunciation issue", "Minor content issue", "Naturalness / prosody issue"]
+      };
+      var DATA = [
+        { n: 1, g: 1, s: "Cửa hàng nội thất xác nhận đơn.", h: "Audio đọc: “Cái bán gỗ này giá hai triệu đồng, mai em giao tận nhà.” (Từ “bàn” bị đọc thành “bán”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "Đọc “bàn” thành “bán” — sai dấu thanh làm đổi hẳn nghĩa của câu (bàn → bán), nên đây là lỗi phát âm mức major.", m: "I rated this down for a major pronunciation error. The speaker says 'cái bán gỗ' — the word 'bàn' (table) is pronounced with the wrong tone as 'bán' (to sell), which changes the meaning of the sentence. The correct form is 'cái bàn gỗ này' (this wooden table). The rest of the sentence is clear." },
+        { n: 2, g: 1, s: "Bản tin thời tiết.", h: "Audio đọc: “Ngày mai trời sẽ mùa to, bà con chú ý mang theo áo mưa.” (Từ “mưa” bị đọc thành “mùa”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Mưa” đọc thành “mùa” khiến dự báo thời tiết sai và gây khó hiểu — lỗi phát âm mức major.", m: "Major pronunciation issue. The speaker says 'trời sẽ mùa to' — 'mưa' (rain) is mispronounced as 'mùa' (season), so the forecast becomes confusing and incorrect. It should be 'trời sẽ mưa to' (it will rain heavily)." },
+        { n: 3, g: 1, s: "Tổng đài nhắc lịch họp.", h: "Audio đọc: “Anh cần đến trước chính giờ để kịp cuộc họp.” (Từ “chín” bị đọc thành “chính”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Chín giờ” thành “chính giờ” — sai dấu thanh ngay trên thông tin giờ giấc, làm chỉ dẫn bị sai lệch, mức major.", m: "I marked this down for a meaning-changing tone error. 'Chín giờ' (nine o'clock) is pronounced as 'chính giờ', and 'chính' means 'main/policy', which makes the instruction misleading. The correct phrase is 'trước chín giờ'." },
+        { n: 4, g: 1, s: "Hướng dẫn thanh toán.", h: "Audio đọc: “Anh có thể chả tiền mặt hoặc chuyển khoản.” (Từ “trả” bị đọc thành “chả”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Trả” đọc thành “chả” — thành một từ khác hẳn, người nghe khó nhận ra đang nói về thanh toán, mức major.", m: "Major issue: the verb 'trả' (to pay) is pronounced as 'chả', which is a different word (a type of sausage, also slang). Listeners may not understand that payment is being discussed. It should be 'Anh có thể trả tiền mặt hoặc chuyển khoản'." },
+        { n: 5, g: 1, s: "Giới thiệu hàng mới.", h: "Audio đọc: “Xản phẩm này vừa về kho sáng nay.” (Từ “sản” bị đọc thành “xản”.)", vh: "Pronunciation, minor–major", c: "Minor pronunciation issue", why: "“Sản” đọc thành “xản” — lẫn phụ âm đầu s/x; nghĩa còn đoán được từ ngữ cảnh nên verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The first word is mispronounced: 'sản phẩm' (product) comes out as 'xản phẩm', which is not a Vietnamese word. The initial consonant s/x is confused. The meaning is still guessable from context, but the error is obvious to native speakers." },
+        { n: 6, g: 1, s: "Đọc tổng tiền hóa đơn.", h: "Audio đọc: “Tổng cộng của anh là nắm trăm nghìn đồng.” (Từ “năm” bị đọc thành “nắm”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Năm trăm nghìn” thành “nắm trăm nghìn” — sai dấu thanh ngay trên số tiền là lỗi chính xác nghiêm trọng, mức major.", m: "The total is read incorrectly: 'năm trăm nghìn' (five hundred thousand) is pronounced as 'nắm trăm nghìn', and 'nắm' means 'to grasp'. A wrong tone on a price is a serious accuracy problem. The correct reading is 'năm trăm nghìn đồng'." },
+        { n: 7, g: 1, s: "Tra cứu đơn hàng.", h: "Audio đọc: “Má đơn hàng của anh là A123, hàng đang trên đường giao.” (Từ “mã” bị đọc thành “má”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Mã” đọc thành “má” — sai dấu thanh làm câu nghe sai và gây khó hiểu trong ngữ cảnh tra cứu đơn, mức major.", m: "The speaker says 'má đơn hàng' — 'mã' (code) is pronounced as 'má' (mother/cheek), which sounds wrong and confusing in an order-tracking context. The correct phrase is 'mã đơn hàng của anh là A123'." },
+        { n: 8, g: 1, s: "Thông báo chuyến bay.", h: "Audio đọc: “Chuyến bay sẽ cất cánh lúc xấu giờ tối.” (Từ “sáu” bị đọc thành “xấu”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Sáu giờ” thành “xấu giờ” — sai giờ cất cánh và đổi nghĩa từ (“xấu” = ugly/bad), mức major.", m: "Major tone error: 'sáu giờ' (six o'clock) is pronounced as 'xấu giờ', where 'xấu' means 'ugly/bad'. The departure time becomes wrong and the sentence sounds unnatural. It should be 'cất cánh lúc sáu giờ tối'." },
+        { n: 9, g: 1, s: "Giải thích bảo hành.", h: "Audio đọc: “Sản phẩm được bảo hành mười năm tháng tại trung tâm.” (Cụm “mười lăm tháng” bị đọc thành “mười năm tháng”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Mười lăm tháng” đọc thành “mười năm tháng” — sai thời hạn bảo hành, gây hiểu lầm cho khách, mức major.", m: "The warranty period is misread. The speaker says 'mười năm tháng', but the correct phrase is 'mười lăm tháng' (fifteen months). Dropping/misreading 'lăm' changes the period from 15 months to a nonsensical 'ten years-months', which misleads the customer." },
+        { n: 10, g: 1, s: "Hẹn gọi lại khách.", h: "Audio đọc: “Em sẽ gỏi lại cho anh sau 10 phút nữa.” (Từ “gọi” bị đọc thành “gỏi”.)", vh: "Pronunciation, major", c: "Major pronunciation issue", why: "“Gọi” đọc thành “gỏi” — đổi hẳn nghĩa từ và nghe buồn cười trong ngữ cảnh dịch vụ, mức major.", m: "The speaker says 'em sẽ gỏi lại' — 'gọi' (to call) is pronounced as 'gỏi' (a Vietnamese salad), which changes the meaning completely and sounds comical in a service context. The correct phrase is 'em sẽ gọi lại cho anh'." },
+        { n: 11, g: 2, s: "Thông báo của trường học.", h: "Audio đọc: “Cái thầy giáo chủ nhiệm sẽ họp phụ huynh vào sáng thứ Bảy.”", vh: "Word choice (classifier), major", c: "Major word-choice / classifier issue", why: "Dùng lượng từ “cái” cho thầy giáo — “cái” chỉ dùng cho vật, dùng cho người là thiếu tôn trọng, mức major.", m: "I rated this down for a classifier error. The speaker says 'cái thầy giáo' — the classifier 'cái' is used for objects and is disrespectful when used for a person, especially a teacher. The correct form is 'thầy giáo chủ nhiệm' with no classifier, or 'thầy chủ nhiệm'." },
+        { n: 12, g: 2, s: "Điều phối kỹ thuật.", h: "Audio đọc: “Có hai cái kỹ thuật viên đang trên đường đến nhà anh.”", vh: "Word choice (classifier), minor–major", c: "Minor word-choice issue", why: "“Hai cái kỹ thuật viên” — “cái” không đi với người, nghe thiếu tự nhiên và hơi thiếu tôn trọng; lỗi lượng từ, verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The classifier 'cái' is used for people: 'hai cái kỹ thuật viên'. 'Cái' only goes with objects, so this sounds unnatural and slightly disrespectful. It should be 'hai kỹ thuật viên đang trên đường đến'." },
+        { n: 13, g: 2, s: "Hướng dẫn làm thủ tục sân bay.", h: "Audio đọc: “Anh nhớ mặc hộ chiếu và vé máy bay khi ra sân bay.”", vh: "Word choice, major", c: "Major word-choice / classifier issue", why: "“Mặc hộ chiếu” — dùng sai động từ (“mặc” chỉ dùng cho quần áo), phải là “mang”, mức major.", m: "Wrong verb: the speaker says 'mặc hộ chiếu' — 'mặc' means to wear clothes and cannot be used with a passport. The correct verb is 'mang' (to bring/carry): 'Anh nhớ mang hộ chiếu và vé máy bay'." }
+        ,
+        { n: 14, g: 2, s: "Nhân viên hỗ trợ trả lời khách.", h: "Audio đọc nguyên văn: “Tôi sẽ kiểm tra với quản lý của tôi và quay lại với bạn sau.” (Câu dịch từng chữ từ tiếng Anh “I'll check with my manager and get back to you”.)", vh: "Naturalness/word choice (calque), minor–major", c: "Naturalness / prosody issue", why: "Câu dịch từng chữ từ tiếng Anh — “kiểm tra với quản lý của tôi”, “quay lại với bạn” — người Việt không nói vậy; lỗi tự nhiên do dịch máy móc (calque), kèm đại từ “tôi” quá cứng cho dịch vụ khách hàng.", m: "The sentence is a word-by-word translation from English ('I'll check with my manager and get back to you'). Vietnamese speakers do not say 'kiểm tra với quản lý của tôi' or 'quay lại với bạn' in this context. A natural version is: 'Em sẽ hỏi ý kiến cấp trên rồi báo lại cho anh.' The pronoun 'tôi' is also too stiff for customer service." },
+        { n: 15, g: 2, s: "Hướng dẫn nộp hồ sơ.", h: "Audio đọc: “Anh vui lòng điện đầy đủ vào đơn này rồi ký tên.” (Từ “điền” bị nói thành “điện”.)", vh: "Word choice, major", c: "Major word-choice / classifier issue", why: "“Điền” nói thành “điện” — thành từ khác hẳn nghĩa (điện = electricity), hướng dẫn trở nên khó hiểu, mức major.", m: "The speaker says 'điện đầy đủ vào đơn' — 'điện' means electricity, while the correct word is 'điền' (to fill in). The instruction becomes confusing. It should be 'Anh vui lòng điền đầy đủ vào đơn này rồi ký tên.'" },
+        { n: 16, g: 2, s: "Gọi xe đón khách.", h: "Audio đọc: “Một con ô tô màu trắng đang chờ anh ở cổng số 2.”", vh: "Word choice (classifier), minor", c: "Minor word-choice issue", why: "“Con ô tô” — sai lượng từ, xe phải dùng “chiếc”; nghĩa vẫn rõ nên chỉ ở mức minor.", m: "The classifier 'con' is used for a car: 'một con ô tô'. 'Con' is for animals and some objects, not vehicles; the correct classifier is 'chiếc': 'Một chiếc ô tô màu trắng đang chờ anh ở cổng số 2.' The meaning is still clear, so this is a minor naturalness issue." },
+        { n: 17, g: 2, s: "Hướng dẫn dùng thuốc.", h: "Audio đọc: “Thuốc này uống ngày hai cái lần, mỗi lần một viên sau ăn.”", vh: "Word choice (classifier), minor–major", c: "Minor word-choice issue", why: "“Hai cái lần” — “lần” tự nó đã là danh từ chỉ số lần, không bao giờ đi với “cái”; lỗi lượng từ, verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The phrase 'hai cái lần' is incorrect — 'lần' (times/occasions) is itself a classifier-like noun and never takes 'cái'. The correct instruction is 'uống ngày hai lần, mỗi lần một viên sau ăn.' In a medical instruction, this kind of error also reduces trust." },
+        { n: 18, g: 2, s: "Họp giao ban được ghi âm đọc lại.", h: "Audio đọc: “Chị vui lòng ký vào biên bảng này giúp em.” (Từ “biên bản” bị nói thành “biên bảng”.)", vh: "Word choice, minor–major", c: "Minor word-choice issue", why: "“Biên bản” nói thành “biên bảng” — sai tên tài liệu (“bảng” = board); nghĩa đoán lại được từ ngữ cảnh nhưng thuật ngữ sai, verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The speaker says 'biên bảng' instead of 'biên bản' (meeting minutes/record). 'Bảng' means a board, so the document name is wrong. The correct phrase is 'ký vào biên bản này'. Meaning is recoverable from context but the term is incorrect." },
+        { n: 19, g: 3, s: "Tổng đài ngân hàng, khách là một cô 65 tuổi hỏi về sổ tiết kiệm.", h: "Suốt câu trả lời, AI xưng “mình” và gọi khách là “bạn”: “Bạn chờ mình kiểm tra sổ của bạn nhé.”", vh: "Register, major", c: "Major register issue", why: "Khách 65 tuổi mà xưng “mình”, gọi “bạn” suốt câu trả lời — quá thân mật và thiếu tôn trọng trong ngữ cảnh tổng đài ngân hàng, mức major.", m: "Major register issue. The customer is a 65-year-old woman, but the AI addresses her as 'bạn' and refers to itself as 'mình' throughout, which is too informal and disrespectful for a bank hotline. It should use 'cô' for the customer and 'cháu/em' or the bank's standard 'em' self-reference, e.g. 'Cô chờ em kiểm tra sổ tiết kiệm của cô nhé ạ.'" },
+        { n: 20, g: 3, s: "Thông báo chính thức của công ty tới khách hàng doanh nghiệp.", h: "Audio đọc: “Mình xin thông báo tới các bạn về việc thay đổi giờ làm việc từ tuần sau.”", vh: "Register, major", c: "Major register issue", why: "Thông báo chính thức cho khách hàng doanh nghiệp mà dùng “mình” và “các bạn” — register quá suồng sã, không khớp văn phong trang trọng, mức major.", m: "The register does not match a formal business announcement. The speaker uses 'mình' for the company and 'các bạn' for business clients, which is far too casual. A formal version would be: 'Chúng tôi xin thông báo tới quý khách hàng về việc thay đổi giờ làm việc từ tuần sau.'" },
+        { n: 21, g: 3, s: "Lễ tân khách sạn trả lời khách.", h: "Audio bắt đầu: “Kính thưa quý khách, dạ em xin phép kiểm tra” — rồi giữa chừng chuyển thành: “ok nha bạn, phòng của bạn là 502 nha.”", vh: "Register consistency, minor–major", c: "Minor register issue", why: "Mở đầu trang trọng (“Kính thưa quý khách…”) rồi giữa chừng rơi xuống suồng sã (“ok nha bạn…”) — register không nhất quán nghe thiếu chuyên nghiệp; verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The response starts with a polite, formal register ('Kính thưa quý khách...') but then switches mid-answer to a very casual style ('ok nha bạn...'). This inconsistency sounds unprofessional for a hotel front desk. The formal register should be maintained throughout." },
+        { n: 22, g: 3, s: "Phòng khám nhắc lịch tái khám cho bệnh nhân 70 tuổi.", h: "Audio đọc: “Bạn nhớ uống thuốc đúng giờ và quay lại tái khám sau hai tuần, mình sẽ gọi nhắc bạn.”", vh: "Register, major", c: "Major register issue", why: "Bệnh nhân 70 tuổi mà gọi “bạn”, xưng “mình” — thiếu lễ phép trong bối cảnh y tế ở Việt Nam, mức major.", m: "The patient is 70 years old, but the AI calls him 'bạn' and itself 'mình', which is disrespectful in a healthcare context in Vietnam. It should address the patient as 'bác' (or 'ông/bà' depending on the clinic's convention) and keep a polite tone throughout." },
+        { n: 23, g: 3, s: "Khách hỏi thăm mẹ mình đang nằm viện.", h: "AI trả lời: “Hiện nó đang được theo dõi ở khoa Nội, gia đình cứ yên tâm.”", vh: "Register, major", c: "Major register issue", why: "Gọi người mẹ đang nằm viện của khách là “nó” — đại từ dùng cho vật/con vật hoặc người bị coi thường — cực kỳ thiếu tôn trọng, mức major.", m: "The AI refers to the customer's hospitalized mother as 'nó' ('it'), which is used for animals, objects, or people one looks down on. This is highly disrespectful. It should say 'Hiện bác đang được theo dõi ở khoa Nội' or 'Hiện bà đang được theo dõi...'" },
+        { n: 24, g: 3, s: "Chatbot bán hàng mỹ phẩm trả lời khách hàng mới, độ tuổi không rõ.", h: "Audio mở đầu: “Cưng ơi, cưng muốn mua son màu gì nè?”", vh: "Register, minor–major", c: "Minor register issue", why: "Mở đầu bằng “Cưng ơi” — cách gọi thân mật chỉ dùng giữa người rất thân — với khách mới không rõ tuổi là không phù hợp, dễ làm khách khó chịu; verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The chatbot opens with 'Cưng ơi', an intimate term of endearment used between close people. Using it with a new customer of unknown age is inappropriate and can make customers uncomfortable. A neutral, friendly opening such as 'Dạ, chị muốn xem son màu nào ạ?' is appropriate." },
+        { n: 25, g: 3, s: "Thông báo dịch vụ hiện đại qua loa phường.", h: "Audio đọc: “Ta thông báo cho bà con biết lịch cắt điện ngày mai.”", vh: "Register, minor–major", c: "Minor register issue", why: "Xưng “ta” trong thông báo dịch vụ ngày nay — nghe cổ và mang tính ra lệnh; cách tự nhiên là “Chúng tôi xin thông báo…”; verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The self-reference 'ta' sounds archaic and authoritarian in a modern public-service announcement; it is not how public announcements address residents today. A natural choice is 'Chúng tôi xin thông báo cho bà con...' or simply stating the announcement directly." },
+        { n: 26, g: 3, s: "Tổng đài trường học, phụ huynh gọi hỏi về giáo viên chủ nhiệm.", h: "AI trả lời: “Bạn ấy hôm nay nghỉ phép, để mình nhắn bạn ấy gọi lại.”", vh: "Register, major", c: "Major register issue", why: "Gọi giáo viên chủ nhiệm là “bạn ấy” — “bạn” chỉ dùng với người ngang hàng; trong giao tiếp nhà trường, giáo viên phải được xưng hô tôn trọng, mức major.", m: "The AI refers to the homeroom teacher as 'bạn ấy'. Teachers must be addressed respectfully in Vietnamese school communication; 'bạn' is for peers. The correct phrasing is 'Thầy/Cô hôm nay nghỉ phép, em sẽ nhắn thầy/cô gọi lại cho anh/chị.'" },
+        { n: 27, g: 4, s: "AI đọc thông báo giao hàng.", h: "Toàn bộ câu được đọc với nhịp đều tăm tắp, mỗi âm tiết dài bằng nhau, không lên xuống giọng: “Đơn hàng của anh đã được giao cho đơn vị vận chuyển.”", vh: "Naturalness/prosody, minor–major", c: "Naturalness / prosody issue", why: "Đọc đều tăm tắp, mỗi âm tiết dài bằng nhau, không ngữ điệu — nghe như robot dù từ ngữ đúng; lỗi độ tự nhiên/ngữ điệu.", m: "The delivery is robotic: every syllable has the same length and there is no natural intonation or phrasing. The words are correct, but the speech does not sound like a human speaker. Natural prosody with normal pauses and sentence melody is needed." },
+        { n: 28, g: 4, s: "Hướng dẫn chờ máy.", h: "Audio ngắt nhịp như sau: “Anh vui lòng / chờ trong giây / lát / em kiểm tra ngay đây.” (Ngắt giữa cụm “giây lát” và sau “lát”.)", vh: "Naturalness (pausing), minor", c: "Naturalness / prosody issue", why: "Ngắt nhịp giữa cụm cố định “giây lát” — điểm dừng phải rơi ở ranh giới cụm từ; nghĩa vẫn rõ nên là lỗi ngắt nhịp mức minor.", m: "The pauses are placed unnaturally, splitting the fixed phrase 'giây lát' ('chờ trong giây / lát'). Pauses should fall at phrase boundaries: 'Anh vui lòng chờ trong giây lát, em kiểm tra ngay đây.' The meaning is still clear, so this is a minor issue." },
+        { n: 29, g: 4, s: "Nhân viên hỏi xác nhận đổi lịch.", h: "Câu “Anh có muốn đổi sang sáng mai không?” được đọc với giọng đi xuống đều đều như câu khẳng định, nghe như thông báo đã quyết định xong.", vh: "Naturalness (intonation), minor–major", c: "Naturalness / prosody issue", why: "Câu hỏi yes/no lại đọc với ngữ điệu đi xuống của câu khẳng định — khách tưởng việc đã quyết định xong; lỗi ngữ điệu câu hỏi.", m: "The yes/no question 'Anh có muốn đổi sang sáng mai không?' is read with a flat, falling statement intonation, so it sounds like a decision already made instead of a question. A question melody with a natural lift is needed for the customer to understand they are being asked." },
+        { n: 30, g: 4, s: "Đọc địa chỉ giao hàng.", h: "Gần như từ nào cũng bị nhấn mạnh kể cả “của”, “là”, “và”: “Địa chỉ CỦA anh LÀ số 5 VÀ đường Lê Lợi.”", vh: "Naturalness (stress), minor", c: "Naturalness / prosody issue", why: "Nhấn mạnh gần như mọi từ, kể cả hư từ “của”, “là”, “và” — nghe gồng và thiếu tự nhiên; lỗi nhấn âm mức minor.", m: "Almost every word is stressed, including function words like 'của', 'là' and 'và'. This makes the speech sound strained and unnatural. In natural Vietnamese, only content words carry emphasis; the address should flow evenly." }
+        ,
+        { n: 31, g: 4, s: "Thông báo giao thông.", h: "Cụm “TP.HCM” được đọc tách từng chữ cái rất chậm: “tê – pê – hát – xê – em”, trong khi phần còn lại đọc bình thường.", vh: "Naturalness, minor", c: "Naturalness / prosody issue", why: "Đánh vần “TP.HCM” từng chữ cái rất chậm làm vỡ nhịp thông báo — người bản xứ đọc “Thành phố Hồ Chí Minh”; lỗi tự nhiên mức minor.", m: "The abbreviation 'TP.HCM' is spelled out letter by letter very slowly ('tê – pê – hát – xê – em'), which breaks the flow of a traffic announcement. Native speakers read it as 'Thành phố Hồ Chí Minh' or a naturally paced 'TP HCM'." },
+        { n: 32, g: 4, s: "Đọc số điện thoại liên hệ cuối câu trả lời.", h: "Phần nội dung đọc rõ ràng, nhưng đến dãy số điện thoại thì đọc nhanh vun vút, các con số dính vào nhau không nghe rõ.", vh: "Audio delivery, major", c: "Major audio-quality issue", why: "Số điện thoại đọc quá nhanh, các số dính vào nhau không nghe rõ — thông tin liên hệ quan trọng nhất không dùng được; đáp án mẫu xếp đây là lỗi truyền đạt mức major.", m: "The main content is clear, but the phone number at the end is read so fast that the digits run together and cannot be understood. Contact information must be read slowly and clearly; as delivered, the most important detail is unusable, so this is a major issue." },
+        { n: 33, g: 4, s: "Đọc bản tin thông báo của UBND.", h: "Hầu như câu nào cũng kết thúc bằng giọng đi lên như câu hỏi, kể cả câu thông báo bình thường.", vh: "Naturalness (intonation), minor", c: "Naturalness / prosody issue", why: "Hầu như câu nào cũng kết thúc bằng giọng đi lên như câu hỏi — bản tin trang trọng nghe thiếu chắc chắn và thiếu tự nhiên; lỗi ngữ điệu mức minor.", m: "Nearly every sentence ends with a rising, question-like intonation, even simple announcements. This makes a formal notice sound uncertain and unnatural. Statements in an announcement should end with a falling, settled intonation." },
+        { n: 34, g: 4, s: "Thông báo chuyến bay bị hủy.", h: "Nội dung đúng, nhưng giọng đọc vui vẻ, nhún nhảy, đầy năng lượng như đang quảng cáo khuyến mãi: “Rất tiếc! Chuyến bay của quý khách đã bị hủy rồi ạ!”", vh: "Naturalness (tone of voice), minor–major", c: "Naturalness / prosody issue", why: "Nội dung đúng nhưng giọng vui vẻ nhún nhảy khi báo tin hủy chuyến — tông giọng không khớp tin xấu, dễ làm khách bực; lỗi tông giọng.", m: "The words are correct, but the delivery is cheerful and bouncy while announcing a flight cancellation. The emotional tone does not match the bad news and can upset customers. A calm, apologetic tone is required for this content." },
+        { n: 35, g: 5, s: "Khách hỏi “Cửa hàng mở cửa mấy giờ?”", h: "AI trả lời đầy đủ và lưu loát — về địa chỉ và chỗ đậu xe, không hề nhắc đến giờ mở cửa.", vh: "Content, major", c: "Major content issue", why: "Khách hỏi giờ mở cửa nhưng AI chỉ nói địa chỉ và chỗ đậu xe — không trả lời câu hỏi; thông tin thêm không bù được phần trả lời bị thiếu, mức major.", m: "The response does not answer the customer's question. The customer asked about opening hours, but the AI only gave the address and parking information. A correct response must state the opening hours; the extra information does not fix the missing answer." },
+        { n: 36, g: 5, s: "Kịch bản cho sẵn giá sản phẩm là 250.000đ, không có chương trình giảm giá.", h: "AI trả lời: “Hiện sản phẩm đang khuyến mãi chỉ còn 199.000đ anh nhé.”", vh: "Content (hallucination), major", c: "Major content issue", why: "AI tự bịa khuyến mãi 199.000đ trong khi kịch bản ghi 250.000đ và không có giảm giá — bịa thông tin giá là lỗi chính xác nghiêm trọng, mức major.", m: "The AI invents a promotion: the scripted price is 250,000đ with no discount, but the AI tells the customer the price is 199,000đ 'on promotion'. Adding unsupported prices is a serious accuracy failure; the response must follow the given information only." },
+        { n: 37, g: 5, s: "Giới thiệu dịch vụ.", h: "AI nói: “Bên em làm việc 7 ngày trong tuần, và đóng cửa vào Chủ nhật anh nhé.”", vh: "Content (contradiction), major", c: "Major content issue", why: "Vừa nói làm việc 7 ngày trong tuần vừa nói đóng cửa Chủ nhật — câu trả lời tự mâu thuẫn, mức major.", m: "The response contradicts itself: it says the business works 7 days a week and also that it is closed on Sundays. One of the two statements must be corrected so the customer gets consistent information." },
+        { n: 38, g: 5, s: "Khách hỏi hai ý: giá bao nhiêu và bảo hành thế nào.", h: "AI trả lời rất kỹ về giá, rồi kết thúc câu trả lời — không nhắc gì đến bảo hành.", vh: "Content (incomplete), minor–major", c: "Minor content issue", why: "Khách hỏi hai ý (giá + bảo hành) nhưng AI chỉ trả lời giá và kết thúc — trả lời thiếu một nửa câu hỏi; verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The answer is incomplete. The customer asked two things — price and warranty — but the AI only explained the price in detail and never mentioned the warranty. Both parts of the question must be answered." },
+        { n: 39, g: 5, s: "Tư vấn nhận phòng khách sạn bằng tiếng Việt.", h: "AI nói: “Anh cứ check-in ở quầy lễ tân, rồi staff sẽ support anh mang hành lý lên phòng, có gì anh cứ call em.” (Chuyển mã sang tiếng Anh không cần thiết trong hội thoại tiếng Việt.)", vh: "Naturalness (code-switching), minor", c: "Naturalness / prosody issue", why: "Chen nhiều từ tiếng Anh không cần thiết (check-in, staff, support, call) trong hội thoại tiếng Việt trong khi từ tiếng Việt tương đương có sẵn — lỗi chuyển mã, mức minor.", m: "The response mixes in English words unnecessarily ('check-in', 'staff', 'support', 'call') in an otherwise Vietnamese conversation, which sounds unnatural for this context. Natural Vietnamese equivalents exist: 'Anh cứ làm thủ tục nhận phòng ở quầy lễ tân, nhân viên sẽ hỗ trợ anh mang hành lý lên phòng.'" },
+        { n: 40, g: 5, s: "Kịch bản quy định trợ lý nhà thuốc chỉ được nhắc thông tin chung và khuyên khách đi khám, không được chẩn đoán hay kê liều. Khách mô tả triệu chứng.", h: "AI trả lời: “Chắc chắn anh bị viêm dạ dày rồi, anh uống thuốc này ngày 3 lần, mỗi lần 2 viên là khỏi.”", vh: "Content (guideline violation), major", c: "Major content issue", why: "Kịch bản cấm chẩn đoán và kê liều, nhưng AI chẩn đoán chắc chắn (“chắc chắn anh bị viêm dạ dày”) và kê liều cụ thể — vi phạm quy định kịch bản, mức major.", m: "The response violates the scenario rules. The pharmacy assistant must not diagnose or prescribe, but the AI states a definite diagnosis ('chắc chắn anh bị viêm dạ dày') and gives a specific dosage. The correct behavior is to give general information and advise the customer to see a doctor." },
+        { n: 41, g: 5, s: "Khách xác nhận lịch hẹn thứ Ba.", h: "AI trả lời: “Dạ em đã đặt lịch cho anh vào thứ Tư tuần này rồi ạ.”", vh: "Content (factual slip), major", c: "Major content issue", why: "Khách xác nhận thứ Ba nhưng AI đặt lịch thứ Tư — sai ngày trong xác nhận lịch hẹn là lỗi chính xác mức major.", m: "The AI confirms the wrong day: the customer confirmed Tuesday (thứ Ba), but the AI says the appointment is booked for Wednesday (thứ Tư). In an appointment confirmation, a wrong day is a major accuracy error." },
+        { n: 42, g: 5, s: "Khách hỏi chính sách đổi trả hàng.", h: "AI trả lời một câu về đổi trả, rồi chuyển sang giới thiệu dài về một sản phẩm hoàn toàn khác đang giảm giá và giục khách mua ngay.", vh: "Content (off-task), minor–major", c: "Minor content issue", why: "Trả lời đổi trả qua một câu rồi chuyển sang quảng cáo sản phẩm khác và giục mua — lạc nhiệm vụ, câu hỏi chính bị trả lời thiếu; verdict mẫu lấy mức đầu của khoảng minor–major.", m: "After one sentence about the return policy, the AI switches to promoting an unrelated discounted product and pushes the customer to buy. This leaves the original question under-answered and goes off-task; the response should focus on the return policy the customer asked about." },
+        { n: 43, g: 6, s: "Nghe rõ từng chữ trong đoạn ghi âm.", h: "Suốt đoạn ghi âm có tiếng xe máy và còi xe nền khá lớn ở phía sau giọng nói.", vh: "Audio quality, minor (or major depending on severity)", c: "Minor audio-quality issue", why: "Tiếng xe máy và còi xe nền lớn suốt đoạn ghi, nhưng lời vẫn nghe rõ từng chữ — mức độ ảnh hưởng tới khả năng nghe hiểu quyết định severity, mẫu này là minor.", m: "The speech itself is clear and correct, but there is loud motorbike and horn noise in the background throughout the recording. In this sample the words are still fully understandable, so I rate it as a minor audio-quality issue; if the noise masked any words, it would be major. Model note: state the effect on intelligibility — that is what decides the severity." },
+        { n: 44, g: 6, s: "Giọng nói bình thường.", h: "Mỗi khi đến từ được nhấn hoặc âm lượng lớn là âm thanh bị rè và vỡ tiếng.", vh: "Audio quality, minor–major", c: "Minor audio-quality issue", why: "Âm thanh rè, vỡ tiếng mỗi khi giọng to lên — nội dung vẫn hiểu được nhưng biến dạng xảy ra thường xuyên; lỗi chất lượng âm thanh, verdict mẫu lấy mức đầu của khoảng minor–major.", m: "The audio clips and distorts whenever the voice gets louder, making stressed words sound harsh and slightly unclear. The content is still understandable, but the distortion is frequent and should be flagged as an audio-quality issue." },
+        { n: 45, g: 6, s: "Câu trả lời đọc tốt ở phần đầu.", h: "Phần cuối — đúng đoạn đọc số điện thoại liên hệ — âm lượng nhỏ dần đến mức gần như không nghe được.", vh: "Audio quality, major", c: "Major audio-quality issue", why: "Cuối đoạn âm lượng nhỏ dần, số điện thoại liên hệ gần như không nghe được — mất thông tin quan trọng nên là major dù giọng nói vốn đúng.", m: "The beginning is fine, but the volume fades at the end and the contact phone number is almost inaudible. Key information is lost, so this is a major audio-quality issue even though the speech itself is correct." },
+        { n: 46, g: 6, s: "Tổng đài xác nhận đổi lịch.", h: "Phát âm rõ, dấu thanh chuẩn, xưng hô “em — anh” nhất quán và lịch sự, nội dung đúng yêu cầu, nhịp nói tự nhiên. Không có lỗi nào.", vh: "No issue", c: "No issue — acceptable", why: "Phát âm, dấu thanh, xưng hô, nội dung và nhịp nói đều đạt — mẫu này dùng được ngay, không có lỗi.", m: "No issues found. The pronunciation and tone marks are accurate, the register ('em' — 'anh') is consistent and polite, the content matches the request, and the pacing sounds natural. This response is ready to use." },
+        { n: 47, g: 6, s: "AI trả lời bằng giọng miền Nam rõ (ví dụ “về” nghe như “dề”, “anh” phát âm kiểu miền Nam), nhưng rõ ràng, nhất quán, nội dung đúng. Kịch bản không yêu cầu giọng vùng nào cụ thể.", h: "Giọng miền Nam rõ, rõ ràng và nhất quán suốt câu trả lời, nội dung đúng yêu cầu.", vh: "No issue (dialect is not an error)", c: "No issue — acceptable", why: "Giọng miền Nam rõ nhưng dễ hiểu và nhất quán, kịch bản không yêu cầu giọng vùng cụ thể — phương ngữ là biến thể chấp nhận được, không phải lỗi.", m: "No issues found. The speaker uses a clear Southern Vietnamese accent consistently (for example 'về' pronounced as 'dề'), but the speech is fully intelligible and natural. The scenario does not require a specific regional accent, so regional pronunciation is acceptable variation, not an error." },
+        { n: 48, g: 6, s: "Thông báo giao hàng trễ.", h: "AI mở đầu bằng lời xin lỗi đúng mực, giải thích ngắn gọn lý do, báo thời gian giao mới chính xác, giọng đồng cảm. Không có lỗi nào.", vh: "No issue", c: "No issue — acceptable", why: "Lời xin lỗi đúng mực, lý do ngắn gọn, giờ giao mới chính xác, giọng đồng cảm — mọi mặt đều đạt, không có lỗi.", m: "No issues found. The apology is polite and appropriate, the reason for the delay is explained briefly, the new delivery time is stated clearly, and the tone is empathetic. Pronunciation and pacing are natural throughout." },
+        { n: 49, g: 6, s: "Hướng dẫn lắp đặt.", h: "Mọi thứ tốt, chỉ có một từ phụ bị phát âm hơi lệch nhưng không đổi nghĩa và nghe vẫn hiểu ngay (“hướng dẫn” đọc hơi nhanh thành “hướng dẩn” — không tạo thành từ khác).", vh: "Minor pronunciation", c: "Minor pronunciation issue", why: "Chỉ một từ phụ phát âm hơi lệch, không thành từ khác và nghĩa rõ ngay — lỗi phát âm mức minor, còn lại mọi mặt đều tốt.", m: "There is one slight mispronunciation of a minor word ('hướng dẫn' is rushed and sounds a little off), but it does not become a different word and the meaning is immediately clear. Everything else is accurate and natural, so this is a minor issue only." },
+        { n: 50, g: 6, s: "Thông báo chính thức của cơ quan.", h: "Nội dung và từ ngữ đều đúng, nhưng giọng đọc mang âm hưởng như người nước ngoài nói tiếng Việt: dấu thanh đôi chỗ chưa tròn, nhịp hơi cứng — vẫn nghe hiểu được toàn bộ.", vh: "Naturalness, minor–major (judgment call)", c: "Naturalness / prosody issue", why: "Nội dung đúng nhưng giọng mang âm hưởng nước ngoài, dấu thanh chưa tròn, nhịp cứng — vẫn nghe hiểu toàn bộ nên là lỗi độ tự nhiên, chưa tới mức lỗi chính xác major.", m: "The content and word choice are correct, but the delivery sounds foreign-accented: some tone marks are not fully rounded and the rhythm is stiff. The whole message is still understandable, so it is not a major accuracy failure; I rate it as a naturalness issue because a formal announcement should sound native-like. Model note: say explicitly that intelligibility is preserved — that is what keeps this below major." }
+      ];
+
+      function mulberry32(a) {
+        return function () {
+          a |= 0; a = (a + 0x6D2B79F5) | 0;
+          var t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function optionsFor(ex) {
+        var opts = [ex.c].concat(NEAR[ex.c]);
+        var rnd = mulberry32(ex.n * 7919 + 13);
+        for (var i = opts.length - 1; i > 0; i--) {
+          var j = Math.floor(rnd() * (i + 1));
+          var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp;
+        }
+        return opts;
+      }
+      function esc(s) {
+        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      }
+
+      var state = { answers: {}, texts: {}, filter: 0 };
+      var listEl = document.getElementById("list");
+      var chipRow = document.getElementById("chipRow");
+
+      function groupRange(g) {
+        var ns = DATA.filter(function (e) { return e.g === g; }).map(function (e) { return e.n; });
+        return ns[0] + "–" + ns[ns.length - 1];
+      }
+      function groupAnswered(g) {
+        return DATA.filter(function (e) { return e.g === g && state.answers[e.n]; }).length;
+      }
+      function groupTotal(g) {
+        return DATA.filter(function (e) { return e.g === g; }).length;
+      }
+
+      function renderChips() {
+        var html = "";
+        html += '<button type="button" class="chip" data-filter="0" aria-pressed="' + (state.filter === 0) + '">Tất cả<span class="cnt">' + Object.keys(state.answers).length + '/50</span></button>';
+        for (var g = 1; g <= 6; g++) {
+          html += '<button type="button" class="chip" data-filter="' + g + '" aria-pressed="' + (state.filter === g) + '">Nhóm ' + g + " · " + GROUPS[g - 1].short + '<span class="cnt">' + groupAnswered(g) + "/" + groupTotal(g) + "</span></button>";
+        }
+        html += '<button type="button" class="reset-btn" id="resetBtn">Làm lại từ đầu</button>';
+        chipRow.innerHTML = html;
+        document.getElementById("resetBtn").addEventListener("click", openReset);
+      }
+
+      function renderList() {
+        var html = "";
+        var lastG = 0;
+        DATA.forEach(function (ex) {
+          if (state.filter !== 0 && ex.g !== state.filter) return;
+          if (ex.g !== lastG) {
+            lastG = ex.g;
+            html += '<div class="ghead"><h2>Nhóm ' + ex.g + " — " + GROUPS[ex.g - 1].name + '</h2><span class="gcount">Bài ' + groupRange(ex.g) + " · " + groupAnswered(ex.g) + "/" + groupTotal(ex.g) + " đã trả lời</span></div>";
+          }
+          var ans = state.answers[ex.n];
+          var opts = optionsFor(ex);
+          var letters = ["A", "B", "C", "D"];
+          html += '<article class="card' + (ans ? " answered" : "") + '" id="card-' + ex.n + '" style="--gc:var(--g' + ex.g + ')">';
+          html += '<div class="card-top"><span class="bnum">Bài ' + ex.n + '</span><span class="gtag">Nhóm ' + ex.g + " · " + GROUPS[ex.g - 1].name + '</span><span class="answered-badge">✓ Đã trả lời</span></div>';
+          html += '<p class="lab">Tình huống</p><p class="scenario">' + esc(ex.s) + "</p>";
+          html += '<p class="lab">Nội dung nghe được</p><p class="heard">' + esc(ex.h) + "</p>";
+          html += '<p class="mcq">Verdict đúng cho mẫu này là gì?</p><div class="opts" role="group" aria-label="Chọn verdict cho bài ' + ex.n + '">';
+          opts.forEach(function (o, i) {
+            var cls = "opt";
+            var mark = letters[i];
+            if (ans) {
+              if (o === ans.choice && ans.correct) cls += " picked-correct";
+              else if (o === ans.choice && !ans.correct) cls += " picked-wrong";
+              else if (o === ex.c) cls += " reveal-correct";
+              else cls += " dim";
+              if (o === ans.choice && ans.correct) mark = "✓";
+              if (o === ans.choice && !ans.correct) mark = "✕";
+            }
+            html += '<button type="button" class="' + cls + '" data-ex="' + ex.n + '" data-opt="' + esc(o) + '"' + (ans ? " disabled" : "") + '><span class="letter">' + mark + "</span><span>" + esc(o) + "</span></button>";
+          });
+          html += "</div>";
+          if (ans) {
+            html += '<div class="feedback show ' + (ans.correct ? "ok" : "no") + '"><b>' + (ans.correct ? "✓ Đúng rồi!" : "✕ Chưa đúng — verdict đúng là: " + esc(ex.c)) + "</b>" + esc(ex.why) + "</div>";
+          } else {
+            html += '<div class="feedback" id="fb-' + ex.n + '"></div>';
+          }
+          var txt = state.texts[ex.n] || "";
+          var wc0 = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+          html += '<label class="write-lab" for="ta-' + ex.n + '">Viết justification của anh (tiếng Anh)</label>';
+          html += '<textarea class="just" id="ta-' + ex.n + '" data-ex="' + ex.n + '" placeholder="Viết theo khung 3 nhịp: verdict + mức độ → trích dẫn bằng chứng → giải thích vì sao sai và bản đúng…">' + esc(txt) + "</textarea>";
+          html += '<div class="wcount" id="wc-' + ex.n + '">' + wc0 + " từ</div>";
+          html += '<button type="button" class="model-btn" data-model="' + ex.n + '" aria-expanded="false">Xem đáp án mẫu <span class="chev">▾</span></button>';
+          html += '<div class="model" id="model-' + ex.n + '"><p class="vh"><span>Verdict mẫu:</span> ' + esc(ex.vh) + '</p><p class="mtext">' + esc(ex.m) + "</p></div>";
+          html += "</article>";
+        });
+        listEl.innerHTML = html;
+      }
+
+      function updateStats() {
+        var answered = Object.keys(state.answers).length;
+        var correct = DATA.filter(function (e) { return state.answers[e.n] && state.answers[e.n].correct; }).length;
+        document.getElementById("stAnswered").textContent = answered;
+        document.getElementById("stCorrect").textContent = correct;
+        document.getElementById("stBar").style.width = (answered * 2) + "%";
+        var banner = document.getElementById("doneBanner");
+        if (answered === 50) {
+          banner.textContent = "Đã hoàn thành cả 50 bài — anh chọn đúng " + correct + "/50 verdict. Mở đáp án mẫu từng bài để đối chiếu rationale, hoặc bấm “Làm lại từ đầu” để ôn vòng mới.";
+          banner.classList.add("show");
+        } else {
+          banner.classList.remove("show");
+        }
+      }
+
+      function refresh() { renderChips(); renderList(); updateStats(); }
+
+      chipRow.addEventListener("click", function (ev) {
+        var b = ev.target.closest("[data-filter]");
+        if (!b) return;
+        state.filter = parseInt(b.getAttribute("data-filter"), 10);
+        renderChips(); renderList();
+      });
+
+      listEl.addEventListener("click", function (ev) {
+        var mb = ev.target.closest("[data-model]");
+        if (mb) {
+          var panel = document.getElementById("model-" + mb.getAttribute("data-model"));
+          var open = panel.classList.toggle("show");
+          mb.setAttribute("aria-expanded", open);
+          mb.firstChild.textContent = open ? "Ẩn đáp án mẫu " : "Xem đáp án mẫu ";
+          return;
+        }
+        var ob = ev.target.closest("[data-opt]");
+        if (!ob || ob.disabled) return;
+        var n = parseInt(ob.getAttribute("data-ex"), 10);
+        var ex = DATA[n - 1];
+        var choice = ob.getAttribute("data-opt");
+        state.answers[n] = { choice: choice, correct: choice === ex.c };
+        renderList(); updateStats(); renderChips();
+        var card = document.getElementById("card-" + n);
+        if (card) {
+          var fb = card.querySelector(".feedback");
+          if (fb) fb.setAttribute("tabindex", "-1");
+        }
+      });
+
+      function updateCount(t) {
+        var v = t.value.trim();
+        var words = v ? v.split(/\s+/).length : 0;
+        var wc = document.getElementById("wc-" + t.getAttribute("data-ex"));
+        if (wc) wc.textContent = words + " từ";
+      }
+      listEl.addEventListener("input", function (ev) {
+        if (ev.target.classList && ev.target.classList.contains("just")) {
+          state.texts[ev.target.getAttribute("data-ex")] = ev.target.value;
+          updateCount(ev.target);
+        }
+      });
+
+      var veil = document.getElementById("resetVeil");
+      function openReset() { veil.classList.add("show"); document.getElementById("resetCancel").focus(); }
+      function closeReset() { veil.classList.remove("show"); }
+      document.getElementById("resetCancel").addEventListener("click", closeReset);
+      veil.addEventListener("click", function (ev) { if (ev.target === veil) closeReset(); });
+      document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") closeReset(); });
+      document.getElementById("resetConfirm").addEventListener("click", function () {
+        state.answers = {};
+        state.texts = {};
+        state.filter = 0;
+        closeReset();
+        refresh();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      refresh();
+    </script>
+  </body>
+</html>
