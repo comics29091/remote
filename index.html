@@ -1,215 +1,390 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
-    <link rel="icon" href="data:," />
-    <title>Aether S2S — Luyện Justification (bản web)</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --bg: #f2f3f0;
-        --surface: #ffffff;
-        --surface-2: #eef0ea;
-        --ink: #1d2420;
-        --ink-soft: #3c463f;
-        --muted: #66716a;
-        --line: #dde1da;
-        --accent: #d94f04;
-        --accent-strong: #b23f02;
-        --accent-soft: #fdeee2;
-        --good: #177245;
-        --good-bg: #e3f3ea;
-        --bad: #c22525;
-        --bad-bg: #fdecec;
-        --model-bg: #f7f3ea;
-        --model-line: #e3d9c3;
-        --shadow: 0 1px 2px rgba(20, 30, 25, .05), 0 8px 24px rgba(20, 30, 25, .05);
-        --g1: #d94f04; --g2: #0e7a5f; --g3: #b03a5b; --g4: #3366b3; --g5: #8a6d1a; --g6: #4a6b8a;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #101312;
-          --surface: #181d1a;
-          --surface-2: #212723;
-          --ink: #e9edea;
-          --ink-soft: #c6cdc7;
-          --muted: #97a29a;
-          --line: #2c332f;
-          --accent: #ff7a29;
-          --accent-strong: #ffa25e;
-          --accent-soft: #3a2413;
-          --good: #4cc38a;
-          --good-bg: #14301f;
-          --bad: #ff8585;
-          --bad-bg: #3a1717;
-          --model-bg: #23201a;
-          --model-line: #453c2a;
-          --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
-        }
-      }
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-      body {
-        margin: 0;
-        background: var(--bg);
-        color: var(--ink);
-        font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
-        font-size: 16.5px;
-        line-height: 1.62;
-        -webkit-font-smoothing: antialiased;
-      }
-      .wrap { max-width: 880px; margin: 0 auto; padding: 0 18px 72px; }
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="icon" href="data:," />
+<title>HaRiEDU — Aether S2S (VN): Bài giảng &amp; Luyện tập</title>
+<style>
+  :root{
+    --teal:#0aa9a0; --teal-dark:#078279; --teal-soft:#e2f5f3;
+    --navy:#12283f; --navy-soft:#33506e;
+    --bg:#f4f8f8; --surface:#ffffff; --surface-2:#eef4f4;
+    --ink:#1c2b33; --ink-soft:#3d4f59; --muted:#6b7f88;
+    --line:#dce7e7; --good:#177245; --good-bg:#e3f3ea;
+    --bad:#c22525; --bad-bg:#fdecec;
+    --warn:#9a6a00; --warn-bg:#fdf3d8;
+    --model-bg:#f2f8f7; --model-line:#bfe3df;
+    --shadow:0 1px 2px rgba(10,50,50,.05),0 10px 28px rgba(10,50,50,.06);
+    --g1:#d94f04; --g2:#0e7a5f; --g3:#b03a5b; --g4:#3366b3; --g5:#8a6d1a; --g6:#4a6b8a; --g7:#6a4fb3;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 18px 80px}
 
-      /* ---------- Hero ---------- */
-      .hero { padding: 34px 0 6px; }
-      .hero h1 { font-size: clamp(26px, 4.6vw, 36px); line-height: 1.2; margin: 0 0 8px; font-weight: 800; letter-spacing: -.01em; }
-      .hero h1 .thin { color: var(--accent); }
-      .hero p.sub { margin: 0 0 22px; color: var(--ink-soft); max-width: 62ch; }
-      .stats { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; }
-      .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 18px; min-width: 132px; box-shadow: var(--shadow); }
-      .stat .num { font-size: 24px; font-weight: 800; line-height: 1.1; }
-      .stat .num small { font-size: 15px; color: var(--muted); font-weight: 600; }
-      .stat .cap { font-size: 13px; color: var(--muted); margin-top: 2px; }
-      .stat.grow { flex: 1 1 220px; display: flex; flex-direction: column; justify-content: center; }
-      .bar { height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-top: 8px; border: 1px solid var(--line); }
-      .bar > i { display: block; height: 100%; width: 0%; background: var(--accent); border-radius: 99px; transition: width .35s ease; }
-      .done-banner { display: none; margin-top: 14px; background: var(--good-bg); border: 1px solid var(--good); color: var(--ink); border-radius: 12px; padding: 12px 16px; font-weight: 500; }
-      .done-banner.show { display: block; }
+  /* ---------- Header ---------- */
+  header.brand{padding:30px 0 4px}
+  .logo{font-size:clamp(30px,5vw,42px);font-weight:800;letter-spacing:-.01em;color:var(--navy);margin:0;line-height:1.1}
+  .logo span{color:var(--teal)}
+  .logo .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--teal);margin-left:7px;vertical-align:baseline}
+  header.brand p.sub{margin:8px 0 0;color:var(--ink-soft);max-width:70ch}
+  header.brand p.sub b{color:var(--navy)}
 
-      /* ---------- Reference panel ---------- */
-      details.ref { margin-top: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
-      details.ref summary { cursor: pointer; padding: 14px 18px; font-weight: 700; list-style: none; display: flex; align-items: center; gap: 10px; min-height: 52px; }
-      details.ref summary::-webkit-details-marker { display: none; }
-      details.ref summary .chev { margin-left: auto; transition: transform .2s ease; color: var(--muted); font-size: 14px; }
-      details.ref[open ] summary .chev { transform: rotate(180deg); }
-      .ref-body { padding: 2px 18px 18px; }
-      .ref-body ol { margin: 0; padding-left: 22px; }
-      .ref-body li { margin: 8px 0; }
-      .ref-body li b { color: var(--accent-strong); }
-      .ref-body .tip { margin-top: 12px; color: var(--muted); font-size: 14.5px; }
+  /* ---------- Tab bar ---------- */
+  .tabbar{position:sticky;top:0;z-index:30;margin:20px -18px 0;padding:10px 18px;
+    background:rgba(244,248,248,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .tabbar .row{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .tabbtn{appearance:none;flex:0 0 auto;border:1.5px solid var(--line);background:var(--surface);color:var(--navy-soft);
+    border-radius:999px;padding:10px 18px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;min-height:46px;white-space:nowrap}
+  .tabbtn[aria-selected="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+  .tabbtn:focus-visible,button:focus-visible,summary:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid rgba(10,169,160,.5);outline-offset:2px}
+  .panel{padding-top:24px}
+  .panel[hidden]{display:none}
+  .panel > h2.ptitle{font-size:23px;color:var(--navy);margin:2px 0 6px;font-weight:800}
+  .panel > p.pintro{color:var(--ink-soft);margin:0 0 18px;max-width:72ch}
 
-      /* ---------- Sticky filter bar ---------- */
-      .filterbar { position: sticky; top: 0; z-index: 20; margin: 22px -18px 0; padding: 12px 18px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-      .filterbar .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-      .chip { appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft); border-radius: 999px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 42px; }
-      .chip .cnt { color: var(--muted); font-weight: 500; font-size: 12.5px; margin-left: 4px; }
-      .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-      .chip[aria-pressed="true"] .cnt { color: inherit; opacity: .7; }
-      .chip:focus-visible, button:focus-visible, summary:focus-visible, textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
-      .reset-btn { margin-left: auto; appearance: none; border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 999px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 42px; }
-      .reset-btn:hover { color: var(--bad); border-color: var(--bad); }
+  /* ---------- Cards / alerts ---------- */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-top:16px}
+  .alert{border-radius:14px;padding:15px 18px;margin-top:14px;border:1px solid}
+  .alert.mand{background:var(--warn-bg);border-color:#e6cf8a;color:#5c4300}
+  .alert.info{background:var(--teal-soft);border-color:#a8ddd9;color:#0b4f4a}
+  .callout{margin-top:18px;background:var(--teal-soft);border:1px solid #a8ddd9;border-left:6px solid var(--teal);
+    border-radius:12px;padding:14px 17px}
+  .callout .ch{font-weight:800;color:var(--teal-dark);margin:0 0 4px;font-size:14px;letter-spacing:.05em;text-transform:uppercase}
+  .callout p{margin:0;color:#0b3f3a}
 
-      /* ---------- Group headings & cards ---------- */
-      .ghead { margin: 34px 0 4px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-      .ghead h2 { font-size: 20px; margin: 0; font-weight: 800; }
-      .ghead .gcount { color: var(--muted); font-size: 14px; }
-      .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 22px 22px 20px; margin-top: 16px; }
-      .card-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-      .bnum { font-weight: 800; font-size: 17px; }
-      .gtag { font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; color: var(--gc, var(--accent-strong)); background: color-mix(in srgb, var(--gc, var(--accent)) 13%, transparent); }
-      .answered-badge { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--good); display: none; align-items: center; gap: 5px; }
-      .card.answered .answered-badge { display: inline-flex; }
-      .lab { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 14px 0 4px; }
-      .lab:first-of-type { margin-top: 0; }
-      .scenario { margin: 0; color: var(--ink-soft); }
-      .heard { margin: 0; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; }
-      .mcq { margin: 18px 0 6px; font-weight: 700; }
-      .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-      @media (max-width: 620px) { .opts { grid-template-columns: 1fr; } .card { padding: 18px 16px; } }
-      .opt { appearance: none; text-align: left; display: flex; gap: 11px; align-items: flex-start; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 13px 14px; font: inherit; font-size: 15.5px; font-weight: 500; cursor: pointer; min-height: 54px; line-height: 1.45; }
-      .opt .letter { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--muted); margin-top: 1px; }
-      .opt:hover:not(:disabled) { border-color: var(--accent); }
-      .opt:disabled { cursor: default; opacity: 1; }
-      .opt.picked-correct { border-color: var(--good); background: var(--good-bg); }
-      .opt.picked-correct .letter { border-color: var(--good); color: var(--good); }
-      .opt.picked-wrong { border-color: var(--bad); background: var(--bad-bg); }
-      .opt.picked-wrong .letter { border-color: var(--bad); color: var(--bad); }
-      .opt.reveal-correct { border-color: var(--good); border-style: dashed; }
-      .opt.reveal-correct .letter { border-color: var(--good); color: var(--good); }
-      .opt.dim { opacity: .55; }
-      .feedback { display: none; margin-top: 14px; border-radius: 10px; padding: 12px 15px; font-size: 15.5px; }
-      .feedback.show { display: block; }
-      .feedback.ok { background: var(--good-bg); border: 1px solid color-mix(in srgb, var(--good) 45%, transparent); }
-      .feedback.no { background: var(--bad-bg); border: 1px solid color-mix(in srgb, var(--bad) 45%, transparent); }
-      .feedback b { display: block; margin-bottom: 2px; }
-      .write-lab { display: block; margin: 20px 0 6px; font-weight: 700; }
-      textarea.just { width: 100%; min-height: 108px; resize: vertical; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; font-size: 15.5px; line-height: 1.55; padding: 12px 14px; }
-      textarea.just::placeholder { color: var(--muted); }
-      .wcount { font-size: 12.5px; color: var(--muted); margin-top: 4px; text-align: right; }
-      .model-btn { margin-top: 12px; appearance: none; border: 1.5px solid var(--accent); color: var(--accent-strong); background: var(--accent-soft); border-radius: 10px; padding: 11px 16px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 48px; display: inline-flex; align-items: center; gap: 8px; }
-      .model-btn .chev { transition: transform .2s ease; font-size: 12px; }
-      .model-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
-      .model { display: none; margin-top: 12px; background: var(--model-bg); border: 1px solid var(--model-line); border-radius: 10px; padding: 15px 17px; }
-      .model.show { display: block; }
-      .model .vh { font-weight: 700; margin: 0 0 6px; }
-      .model .vh span { color: var(--muted); font-weight: 600; }
-      .model p.mtext { margin: 0; font-family: "Source Serif 4", Georgia, serif; font-size: 16.5px; line-height: 1.65; }
+  /* ---------- Audio slot ---------- */
+  .audio-slot{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1.5px dashed #b9cfcf;
+    border-radius:999px;padding:9px 16px;margin:0 0 18px;color:var(--muted);font-size:14.5px;font-weight:600}
+  .audio-slot .play{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#cfe0e0;color:#fff;
+    display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+  .audio-slot .track{flex:1;height:6px;border-radius:99px;background:#d7e4e4}
+  .audio-slot .track i{display:block;height:100%;width:0;background:#b9cfcf;border-radius:99px}
 
-      footer.note { margin-top: 44px; color: var(--muted); font-size: 14.5px; border-top: 1px solid var(--line); padding-top: 18px; }
+  /* ---------- Accordion (Tab 1) ---------- */
+  .acc{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-top:16px;overflow:hidden}
+  .acc > button.acc-head{appearance:none;width:100%;text-align:left;background:var(--surface);border:0;cursor:pointer;
+    display:flex;align-items:center;gap:14px;padding:18px 20px;font:inherit;min-height:60px}
+  .acc .chnum{flex:0 0 auto;width:38px;height:38px;border-radius:12px;background:var(--teal);color:#fff;font-weight:800;
+    display:inline-flex;align-items:center;justify-content:center;font-size:16px}
+  .acc .chtitle{font-weight:800;color:var(--navy);font-size:17.5px;line-height:1.35}
+  .acc .chev{margin-left:auto;color:var(--muted);transition:transform .2s ease;font-size:15px}
+  .acc.open .chev{transform:rotate(180deg)}
+  .acc-body{display:none;border-top:1px solid var(--line);padding:20px 22px 22px}
+  .acc.open .acc-body{display:block}
+  @media (max-width:640px){.acc-body{padding:16px 15px 18px}.card{padding:18px 15px}}
 
-      /* ---------- Reset modal ---------- */
-      .modal-veil { display: none; position: fixed; inset: 0; background: rgba(10, 12, 11, .55); z-index: 50; align-items: center; justify-content: center; padding: 20px; }
-      .modal-veil.show { display: flex; }
-      .modal { background: var(--surface); color: var(--ink); border-radius: 14px; max-width: 420px; width: 100%; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
-      .modal h3 { margin: 0 0 8px; font-size: 19px; }
-      .modal p { margin: 0 0 20px; color: var(--ink-soft); }
-      .modal .mrow { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
-      .modal button { appearance: none; border-radius: 10px; padding: 11px 18px; font: inherit; font-weight: 700; cursor: pointer; min-height: 48px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
-      .modal button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <header class="hero">
-        <h1>Aether S2S — Luyện <span class="thin">Justification</span></h1>
-        <p class="sub">50 bài luyện cho dự án Aether S2S (Outlier): nghe tình huống, chọn <b>verdict</b> đúng, rồi tự viết <b>justification bằng tiếng Anh</b> theo khung 3 nhịp và đối chiếu đáp án mẫu. Đề tự chế để luyện tập — không phải đề thật của Outlier.</p>
-        <div class="stats" role="status" aria-live="polite">
-          <div class="stat"><div class="num"><span id="stAnswered">0</span><small>/50</small></div><div class="cap">Bài đã trả lời</div></div>
-          <div class="stat"><div class="num"><span id="stCorrect">0</span></div><div class="cap">Verdict đúng</div></div>
-          <div class="stat grow"><div class="cap" style="margin:0">Tiến độ toàn bộ</div><div class="bar"><i id="stBar"></i></div></div>
-        </div>
-        <div class="done-banner" id="doneBanner"></div>
-        <details class="ref">
-          <summary>Khung justification 3 nhịp — xem nhanh khi viết <span class="chev">▾</span></summary>
-          <div class="ref-body">
-            <ol>
-              <li><b>Verdict + mức độ:</b> nêu kết luận trước — lỗi thuộc nhóm nào (pronunciation, word choice, register, naturalness, content, audio quality), major hay minor; mẫu đạt thì ghi “No issue”. Ví dụ: <i>“I rated this down for a major pronunciation issue.”</i></li>
-              <li><b>Evidence:</b> đưa bằng chứng cụ thể — mốc thời gian (nếu có) và trích nguyên văn đoạn lỗi: <i>“The speaker says ‘cái bán gỗ’…”</i>. Không có trích dẫn là bài yếu.</li>
-              <li><b>Explanation + bản đúng:</b> giải thích vì sao sai trong tiếng Việt tự nhiên và dạng đúng phải thế nào: <i>“…which changes the meaning. The correct form is ‘cái bàn gỗ này’.”</i></li>
-            </ol>
-            <p class="tip">Khi nghe, rà theo 6 nhóm lỗi: phát âm &amp; dấu thanh · chọn từ &amp; lượng từ · xưng hô (register) · độ tự nhiên &amp; ngữ điệu · nội dung &amp; bám kịch bản · chất lượng âm thanh. Mục tiêu mỗi justification: 3–5 câu, viết trong 2–3 phút.</p>
-          </div>
-        </details>
-      </header>
+  /* ---------- Rendered markdown ---------- */
+  .md h3{color:var(--navy);font-size:18.5px;margin:22px 0 8px;font-weight:800}
+  .md h3:first-child{margin-top:2px}
+  .md h4{color:var(--navy-soft);font-size:16.5px;margin:18px 0 6px;font-weight:700}
+  .md p{margin:9px 0}
+  .md ul,.md ol{margin:8px 0 12px;padding-left:24px}
+  .md li{margin:5px 0}
+  .md strong{color:var(--navy)}
+  .md code{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:.92em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .md pre{background:#0f2a33;color:#dff3f0;border-radius:12px;padding:16px 18px;overflow-x:auto;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+  .md blockquote{margin:12px 0;padding:10px 16px;border-left:4px solid var(--teal);background:var(--model-bg);border-radius:0 10px 10px 0;color:var(--ink-soft)}
+  .md table{border-collapse:collapse;width:100%;margin:14px 0;font-size:15px;display:block;overflow-x:auto}
+  .md th,.md td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  .md th{background:var(--teal-soft);color:var(--navy);font-weight:700;white-space:nowrap}
+  .md hr{border:0;border-top:1px solid var(--line);margin:20px 0}
+  .md .chk{list-style:none;padding-left:2px}
+  .md .chk li{display:flex;gap:10px;align-items:flex-start}
+  .md .chk .box{flex:0 0 auto;width:19px;height:19px;border:2px solid #a9c4c4;border-radius:5px;margin-top:4px;background:#fff}
 
-      <nav class="filterbar" aria-label="Lọc theo nhóm bài">
-        <div class="row" id="chipRow"></div>
-      </nav>
+  /* ---------- Tab 2 ---------- */
+  .phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  @media (max-width:820px){.phase-grid{grid-template-columns:1fr}}
+  .phase{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px}
+  .phase h3{margin:0 0 10px;color:var(--navy);font-size:17px;display:flex;align-items:center;gap:10px}
+  .phase h3 .pn{width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:800}
+  .trap-list{list-style:none;margin:6px 0 0;padding:0;counter-reset:trap}
+  .trap-list li{display:flex;gap:12px;padding:13px 4px;border-bottom:1px solid var(--line);align-items:flex-start}
+  .trap-list li:last-child{border-bottom:0}
+  .trap-list input[type="checkbox"]{width:22px;height:22px;margin-top:2px;flex:0 0 auto;accent-color:var(--teal)}
+  .trap-list .tn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--warn-bg);border:1px solid #e6cf8a;color:#7a5800;
+    font-weight:800;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;margin-top:1px}
+  .trap-list label{cursor:pointer}
+  .phase .chkitem{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+  .phase .chkitem:last-child{border-bottom:0}
+  .phase .chkitem input[type="checkbox"]{width:21px;height:21px;margin-top:2px;flex:0 0 auto;accent-color:var(--teal)}
 
-      <main id="list"></main>
+  /* ---------- Exercises (Tab 3/4) ---------- */
+  .stats{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;margin-top:4px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 18px;min-width:128px;box-shadow:var(--shadow)}
+  .stat .num{font-size:24px;font-weight:800;line-height:1.1;color:var(--navy)}
+  .stat .num small{font-size:15px;color:var(--muted);font-weight:600}
+  .stat .cap{font-size:13px;color:var(--muted);margin-top:2px}
+  .stat.grow{flex:1 1 220px;display:flex;flex-direction:column;justify-content:center}
+  .bar{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:8px;border:1px solid var(--line)}
+  .bar > i{display:block;height:100%;width:0%;background:var(--teal);border-radius:99px;transition:width .35s ease}
+  .filterbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:18px}
+  .chip{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:999px;
+    padding:9px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px}
+  .chip .cnt{color:var(--muted);font-weight:500;font-size:12.5px;margin-left:4px}
+  .chip[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .chip[aria-pressed="true"] .cnt{color:inherit;opacity:.75}
+  .reset-btn{margin-left:auto;appearance:none;border:1px solid var(--line);background:transparent;color:var(--muted);
+    border-radius:999px;padding:9px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:42px}
+  .reset-btn:hover{color:var(--bad);border-color:var(--bad)}
+  .ghead{margin:32px 0 2px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .ghead h3{font-size:19px;margin:0;font-weight:800;color:var(--navy)}
+  .ghead .gcount{color:var(--muted);font-size:14px}
+  .ecard{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:22px;margin-top:16px}
+  @media (max-width:640px){.ecard{padding:18px 15px}}
+  .card-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .bnum{font-weight:800;font-size:16.5px;color:var(--navy)}
+  .gtag{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;color:var(--gc);
+    background:color-mix(in srgb,var(--gc) 12%,transparent)}
+  .answered-badge{margin-left:auto;font-size:13px;font-weight:700;color:var(--good);display:none;align-items:center;gap:5px}
+  .ecard.answered .answered-badge{display:inline-flex}
+  .lab{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+  .lab:first-of-type{margin-top:0}
+  .scenario{margin:0;color:var(--ink-soft)}
+  .heard{margin:0;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .mcq{margin:18px 0 6px;font-weight:700;color:var(--navy)}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:620px){.opts{grid-template-columns:1fr}}
+  .opt{appearance:none;text-align:left;display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--line);background:var(--surface);
+    color:var(--ink);border-radius:10px;padding:13px 14px;font:inherit;font-size:15.5px;font-weight:500;cursor:pointer;min-height:54px;line-height:1.45}
+  .opt .letter{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:inline-flex;align-items:center;
+    justify-content:center;font-size:13px;font-weight:700;color:var(--muted);margin-top:1px}
+  .opt:hover:not(:disabled){border-color:var(--teal)}
+  .opt:disabled{cursor:default;opacity:1}
+  .opt.picked-correct{border-color:var(--good);background:var(--good-bg)}
+  .opt.picked-correct .letter{border-color:var(--good);color:var(--good)}
+  .opt.picked-wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.picked-wrong .letter{border-color:var(--bad);color:var(--bad)}
+  .opt.reveal-correct{border-color:var(--good);border-style:dashed}
+  .opt.reveal-correct .letter{border-color:var(--good);color:var(--good)}
+  .opt.dim{opacity:.55}
+  .feedback{display:none;margin-top:14px;border-radius:10px;padding:12px 15px;font-size:15.5px}
+  .feedback.show{display:block}
+  .feedback.ok{background:var(--good-bg);border:1px solid rgba(23,114,69,.45)}
+  .feedback.no{background:var(--bad-bg);border:1px solid rgba(194,37,37,.45)}
+  .feedback b{display:block;margin-bottom:2px}
+  .write-lab{display:block;margin:20px 0 6px;font-weight:700;color:var(--navy)}
+  textarea.just{width:100%;min-height:104px;resize:vertical;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);
+    color:var(--ink);font:inherit;font-size:15.5px;line-height:1.55;padding:12px 14px}
+  textarea.just::placeholder{color:var(--muted)}
+  .wcount{font-size:12.5px;color:var(--muted);margin-top:4px;text-align:right}
+  .model-btn{margin-top:12px;appearance:none;border:1.5px solid var(--teal);color:var(--teal-dark);background:var(--teal-soft);
+    border-radius:10px;padding:11px 16px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;min-height:48px;display:inline-flex;align-items:center;gap:8px}
+  .model-btn:disabled{opacity:.45;cursor:not-allowed}
+  .model-btn .chev{transition:transform .2s ease;font-size:12px}
+  .model-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+  .model{display:none;margin-top:12px;background:var(--model-bg);border:1px solid var(--model-line);border-radius:10px;padding:15px 17px}
+  .model.show{display:block}
+  .model .vh{font-weight:700;margin:0 0 6px;color:var(--navy)}
+  .model .vh span{color:var(--muted);font-weight:600}
+  .model p.mtext{margin:0;font-size:16px;line-height:1.65}
+  .done-banner{display:none;margin-top:14px;background:var(--good-bg);border:1px solid var(--good);border-radius:12px;padding:12px 16px;font-weight:500}
+  .done-banner.show{display:block}
 
-      <footer class="note">Lộ trình luyện gợi ý: làm Nhóm 1–2 trước (kỹ thuật chấm lỗi), rồi Nhóm 3–4 (register và độ tự nhiên — hai nhóm dễ mất điểm nhất vì phải giải thích bằng tiếng Anh), cuối cùng Nhóm 5–6 (nội dung và ca đạt/biên — luyện cả việc viết justification cho câu trả lời TỐT). Bài làm trên trang này chỉ giữ trong lúc trang đang mở.</footer>
+  /* ---------- Tab 4 ---------- */
+  table.sum{border-collapse:collapse;width:100%;margin-top:14px;font-size:15.5px;background:var(--surface);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  table.sum th,table.sum td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+  table.sum th{background:var(--teal-soft);color:var(--navy);font-weight:700}
+  table.sum tr:last-child td{border-bottom:0}
+  table.sum tr.weak td{background:#fff6e0}
+  table.sum tr.total td{font-weight:800;color:var(--navy);background:var(--surface-2)}
+  .accbar{height:9px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);min-width:90px;overflow:hidden}
+  .accbar i{display:block;height:100%;background:var(--teal)}
+  .accbar.low i{background:#d9a404}
+  .big-btn{appearance:none;border:0;background:var(--teal);color:#fff;border-radius:12px;padding:14px 22px;font:inherit;
+    font-size:16px;font-weight:800;cursor:pointer;min-height:52px;box-shadow:var(--shadow)}
+  .big-btn:hover{background:var(--teal-dark)}
+  .big-btn.ghost{background:var(--surface);color:var(--teal-dark);border:1.5px solid var(--teal)}
+  .btnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
+  .hintline{color:var(--muted);font-size:14.5px}
+  textarea.report{width:100%;min-height:220px;border:1.5px solid var(--line);border-radius:12px;background:#0f2a33;color:#dff3f0;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.6;padding:14px 16px;margin-top:14px}
+  .empty-note{background:var(--surface);border:1.5px dashed #b9cfcf;border-radius:14px;padding:20px;color:var(--muted);margin-top:16px;text-align:center}
+
+  /* ---------- Tab 5 ---------- */
+  .qr-grid{display:grid;grid-template-columns:1fr;gap:0}
+  pre.tpl{background:#0f2a33;color:#dff3f0;border-radius:12px;padding:18px;overflow-x:auto;white-space:pre-wrap;word-break:break-word;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.6;margin:10px 0 0}
+  table.qr{border-collapse:collapse;width:100%;margin-top:10px;font-size:15px}
+  table.qr th,table.qr td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  table.qr th{background:var(--teal-soft);color:var(--navy)}
+  .thresh{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  @media (max-width:640px){.thresh{grid-template-columns:1fr}}
+  .thresh .t{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .thresh .t .tv{font-size:21px;font-weight:800;color:var(--teal-dark)}
+  .thresh .t .tk{font-weight:700;color:var(--navy)}
+  .card h3.ct{margin:0 0 4px;color:var(--navy);font-size:18.5px;font-weight:800}
+  .card p.cd{margin:0;color:var(--ink-soft)}
+
+  footer.note{margin-top:48px;color:var(--muted);font-size:14.5px;border-top:1px solid var(--line);padding-top:18px}
+
+  /* ---------- Reset modal ---------- */
+  .modal-veil{display:none;position:fixed;inset:0;background:rgba(10,20,20,.55);z-index:60;align-items:center;justify-content:center;padding:20px}
+  .modal-veil.show{display:flex}
+  .modal{background:var(--surface);color:var(--ink);border-radius:14px;max-width:430px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .modal h3{margin:0 0 8px;font-size:19px;color:var(--navy)}
+  .modal p{margin:0 0 20px;color:var(--ink-soft)}
+  .modal .mrow{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+  .modal button{appearance:none;border-radius:10px;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer;min-height:48px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+  .modal button.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="brand">
+    <h1 class="logo">HaRi<span>EDU</span><span class="dot"></span></h1>
+    <p class="sub"><b>Aether S2S (VN) — Outlier.</b> Toàn bộ bài giảng webinar onboarding 21/10/2026, checklist cần nhớ và bộ bài tập hai vòng: làm vòng 1, xem tổng hợp lỗi theo nhóm, rồi luyện lại đúng những câu đã sai ở vòng 2. Nội dung luyện tập tự soạn để học — không phải đề thật của Outlier.</p>
+  </header>
+
+  <nav class="tabbar" aria-label="Điều hướng chính">
+    <div class="row" role="tablist">
+      <button type="button" class="tabbtn" role="tab" data-tab="1" aria-selected="true">📚 Bài giảng</button>
+      <button type="button" class="tabbtn" role="tab" data-tab="2" aria-selected="false">⚠️ Cần lưu ý &amp; Phải làm</button>
+      <button type="button" class="tabbtn" role="tab" data-tab="3" aria-selected="false">✍️ Bài tập vòng 1</button>
+      <button type="button" class="tabbtn" role="tab" data-tab="4" aria-selected="false">🎯 Tổng hợp lỗi &amp; Vòng 2</button>
+      <button type="button" class="tabbtn" role="tab" data-tab="5" aria-selected="false">⚡ Tra cứu nhanh</button>
     </div>
+  </nav>
 
-    <div class="modal-veil" id="resetVeil" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
-      <div class="modal">
-        <h3 id="resetTitle">Làm lại từ đầu?</h3>
-        <p>Toàn bộ lựa chọn verdict và phần justification đã viết ở cả 50 bài sẽ bị xoá. Anh chắc chắn muốn bắt đầu vòng luyện mới chứ?</p>
-        <div class="mrow">
-          <button type="button" id="resetCancel">Huỷ</button>
-          <button type="button" class="danger" id="resetConfirm">Xoá và làm lại</button>
-        </div>
+  <!-- ================= TAB 1 ================= -->
+  <section class="panel" id="panel-1" role="tabpanel">
+    <h2 class="ptitle">Bài giảng — Aether S2S Onboarding (VN)</h2>
+    <p class="pintro">Biên soạn từ 44 slide của webinar 21/10/2026 (deck quy trình S2S + deck “Common Errors – Live S2S Elo – Vietnamese”). Bấm vào từng chương để mở. Cuối mỗi chương là hộp <b>“Cần lưu ý”</b> tóm điểm dễ mất điểm nhất.</p>
+    <div id="introAlerts"></div>
+    <div id="chapters"></div>
+  </section>
+
+  <!-- ================= TAB 2 ================= -->
+  <section class="panel" id="panel-2" role="tabpanel" hidden>
+    <h2 class="ptitle">Cần lưu ý &amp; Phải làm</h2>
+    <p class="pintro">14 bẫy hay gặp nhất (Mục 11 của bài giảng) dạng checklist để tự rà trước mỗi phiên làm task, và checklist “phải làm” ba giai đoạn (Mục 10). Đánh dấu chỉ giữ trong phiên mở trang này.</p>
+    <div class="card">
+      <h3 class="ct">⚠️ 14 bẫy hay gặp — rà soát nhanh</h3>
+      <p class="cd">Đọc qua và tick từng mục như một lần tự kiểm tra trước khi bắt đầu.</p>
+      <ol class="trap-list" id="trapList"></ol>
+    </div>
+    <div class="phase-grid" id="phaseGrid"></div>
+  </section>
+
+  <!-- ================= TAB 3 ================= -->
+  <section class="panel" id="panel-3" role="tabpanel" hidden>
+    <h2 class="ptitle">Bài tập vòng 1</h2>
+    <p class="pintro">Hai phần: <b>(a)</b> 50 bài viết justification — chọn verdict đúng, tự viết rationale tiếng Anh theo khung 3 nhịp rồi mới xem đáp án mẫu; <b>(b)</b> bộ “Phán đoán như QA” — các tình huống thật trong bài giảng, hãy phán đoán như QA của Outlier. Điểm được tính riêng theo từng nhóm và tổng hợp ở Tab 4.</p>
+    <div class="stats" role="status" aria-live="polite">
+      <div class="stat"><div class="num"><span id="stAnswered">0</span><small>/61</small></div><div class="cap">Bài đã trả lời</div></div>
+      <div class="stat"><div class="num"><span id="stCorrect">0</span></div><div class="cap">Trả lời đúng</div></div>
+      <div class="stat grow"><div class="cap" style="margin:0">Tiến độ vòng 1</div><div class="bar"><i id="stBar"></i></div></div>
+    </div>
+    <div class="done-banner" id="doneBanner"></div>
+    <div class="filterbar" id="chipRow"></div>
+    <main id="list"></main>
+  </section>
+
+  <!-- ================= TAB 4 ================= -->
+  <section class="panel" id="panel-4" role="tabpanel" hidden>
+    <h2 class="ptitle">Tổng hợp lỗi &amp; Vòng 2</h2>
+    <p class="pintro">Số liệu dưới đây tính trực tiếp từ bài làm ở Tab 3 trong cùng phiên. Nhóm yếu nhất được đánh dấu. Bấm “Tạo vòng 2” để luyện lại toàn bộ câu đã làm sai (đáp án mẫu bị ẩn cho đến khi trả lời lại), hoặc xuất báo cáo lỗi để gửi cho Harmione chấm rationale.</p>
+    <div id="sumArea"></div>
+    <div class="btnrow">
+      <button type="button" class="big-btn" id="mkR2">🎯 Tạo vòng 2 từ các câu sai</button>
+      <button type="button" class="big-btn ghost" id="mkReport">📋 Xuất báo cáo lỗi</button>
+      <span class="hintline" id="r2hint"></span>
+    </div>
+    <div id="reportArea" hidden>
+      <textarea class="report" id="reportTxt" readonly aria-label="Báo cáo lỗi"></textarea>
+      <div class="btnrow">
+        <button type="button" class="big-btn" id="copyReport">Sao chép báo cáo</button>
+        <span class="hintline" id="copyHint"></span>
       </div>
     </div>
+    <div id="r2list"></div>
+  </section>
 
-    <script>
-      "use strict";
-      var GROUPS = [
+  <!-- ================= TAB 5 ================= -->
+  <section class="panel" id="panel-5" role="tabpanel" hidden>
+    <h2 class="ptitle">Tra cứu nhanh</h2>
+    <p class="pintro">Những bảng cần nhìn liếc qua khi đang làm task thật: template rationale chính thức, ánh xạ Error Cluster → dimension, thứ tự ưu tiên theo loại scenario và các ngưỡng phải nhớ.</p>
+
+    <div class="card">
+      <h3 class="ct">✍️ Template rationale chính thức (Update 10/01)</h3>
+      <p class="cd">Được Outlier khuyến khích sử dụng. Rationale <b>phải viết bằng tiếng Anh</b>, tối thiểu 100 ký tự, biện minh cho từng dimension.</p>
+      <pre class="tpl" id="tplPre"></pre>
+      <div class="callout"><p class="ch">Quy tắc bằng chứng</p>
+      <p>Vấn đề xảy ra <b>dưới 3 lần</b>: liệt kê đầy đủ mọi ví dụ. Từ <b>3 lần trở lên</b>: ghi số lượng tổng ước tính và ít nhất 3 ví dụ. Với “Tie (both good)”, Task Success Pass và cluster không flag thì giải thích là không bắt buộc. Không nhất thiết phải nêu mức severity của lỗi Audio Quality / Error Cluster trong rationale.</p></div>
+    </div>
+
+    <div class="card">
+      <h3 class="ct">🧩 Error Cluster → dimension bị trừ</h3>
+      <p class="cd">Ánh xạ theo slide (Mục 5.4). Các cluster còn lại (Bridging Quality, Looping/LLMism, Anthropomorphism, Failed Correction, Overreacted, Bad ASR, Not Locally Relevant…) không có ánh xạ dimension riêng — vẫn phải flag khi có lỗi và giải thích trong rationale vì sao bằng chứng khớp định nghĩa của cluster.</p>
+      <table class="qr">
+        <tr><th>Error Cluster</th><th>Ánh xạ / ngưỡng</th></tr>
+        <tr><td><b>Interrupted User</b></td><td>→ <b>Conversational Dynamics</b>. Chỉ tính khi lời chồng lấn/câu đệm thực sự làm gián đoạn người dùng (xem quy tắc backchannels ở Chương 5).</td></tr>
+        <tr><td><b>Instruction Following Quality</b></td><td>→ <b>Task Success</b></td></tr>
+        <tr><td><b>Inaccuracy</b></td><td>→ <b>Utility</b>. Nếu Factuality Guidance flag đúng và lỗi ở mức major thì trừ Utility.</td></tr>
+        <tr><td><b>Wrong Language</b></td><td>→ <b>Task Success, KHÔNG phải CD</b>. Luôn flag cluster. Task Success = <b>Fail</b>: không chuyển được sang đúng ngôn ngữ hoặc cần <b>hơn 1 lần nhắc</b>. = <b>Partial</b>: tự chuyển đúng, hoặc chuyển đúng sau 1 lần nhắc.</td></tr>
+        <tr><td><b>Latency</b></td><td>→ <b>Conversational Dynamics</b>. Chỉ flag khi model phản hồi trễ <b>≥ 4 giây</b>.</td></tr>
+        <tr><td><b>Wrong Accent / Variant</b></td><td>→ <b>Naturalness (NEA)</b></td></tr>
+        <tr><td><b>Wrong Gender</b></td><td>→ <b>Audio Quality</b> (khi giới tính giọng thay đổi, ví dụ nữ → nam).</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 class="ct">🏁 Thứ tự ưu tiên theo loại scenario (cho Overall Preference)</h3>
+      <p class="cd">Cách chấm từng dimension không đổi — chỉ thứ tự ưu tiên thay đổi. Ưu tiên <b>không tuyệt đối</b>: lỗi nghiêm trọng ảnh hưởng mục tiêu người dùng có thể đảo ngược thứ tự.</p>
+      <table class="qr">
+        <tr><th>Loại scenario</th><th>Thứ tự ưu tiên</th><th>Câu neo</th></tr>
+        <tr><td><b>EQ</b></td><td>NEA &gt; Utility &gt; Audio Quality</td><td>“The experience is the product”</td></tr>
+        <tr><td><b>IQ</b></td><td>Utility &gt; NEA &gt; Audio Quality</td><td>“The information is the product”</td></tr>
+        <tr><td><b>Hybrid</b></td><td>Cân bằng cả hai — tự hỏi: “Người dùng muốn đạt được điều gì từ tương tác này?”</td><td>—</td></tr>
+        <tr><td><b>Endpointing / CD</b></td><td>CD &gt; Naturalness &gt; Audio Quality</td><td>“The conversation flow is the product”</td></tr>
+      </table>
+      <p class="cd" style="margin-top:12px">Khung mặc định (slide Final Thoughts): <b>Naturalness/Engagement &gt; Utility &gt; Task Success</b>. Khi scenario thuộc một loại cụ thể ở bảng trên, dùng thứ tự của loại đó và giải thích trade-off trong rationale.</p>
+    </div>
+
+    <div class="card">
+      <h3 class="ct">🎚️ Các ngưỡng phải nhớ</h3>
+      <div class="thresh">
+        <div class="t"><div class="tv">≥ 100 ký tự</div><div class="tk">Độ dài tối thiểu của rationale</div><div>Phải biện minh cho từng dimension, có bằng chứng cụ thể (turn / timestamp / trích dẫn).</div></div>
+        <div class="t"><div class="tv">≥ 4 giây</div><div class="tk">Ngưỡng flag Latency</div><div>Model phản hồi chậm dưới 4 giây thì không flag; khoảng dừng dưới 3 giây không đạt ngưỡng trừ điểm.</div></div>
+        <div class="t"><div class="tv">&gt; 50%</div><div class="tk">Chênh lệch độ dài hai hội thoại</div><div>Chênh lệch quá 50% giữa hai model bị xem là quá lớn → lỗi Scenario Coherence, <b>auto-fail</b> phía rater.</div></div>
+        <div class="t"><div class="tv">&lt; 3 / ≥ 3 lần</div><div class="tk">Quy tắc số lượng bằng chứng</div><div>Dưới 3 lần: liệt kê hết. Từ 3 lần: ghi tổng số ước tính + ít nhất 3 ví dụ.</div></div>
+        <div class="t"><div class="tv">15+ lượt</div><div class="tk">Scenario dài — hay bị kết thúc sớm nhất</div><div>Số lượt tối thiểu chỉ tính lượt của <b>rater</b>, không tính lượt của model.</div></div>
+        <div class="t"><div class="tv">−2đ / −1đ / −1đ</div><div class="tk">Trừ điểm phía người rate</div><div>Rate sai Dimension Quality −2đ · thiếu/thừa Error Cluster −1đ · rationale không đạt −1đ. Bốn lỗi ở Chương 3 là <b>auto-fail</b>.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">HaRiEDU — tài liệu tự học nội bộ. Nguồn: bài giảng biên soạn từ webinar Aether S2S Onboarding Vietnamese 21/10/2026 và bộ 50 bài luyện justification tự soạn. Bài làm chỉ giữ trong phiên mở trang; đóng trang là bắt đầu lại.</footer>
+</div>
+
+<div class="modal-veil" id="resetVeil" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="modal">
+    <h3 id="resetTitle">Làm lại từ đầu?</h3>
+    <p>Toàn bộ lựa chọn, rationale đã viết và kết quả vòng 2 ở mọi bài sẽ bị xoá. Anh chắc chắn muốn bắt đầu phiên luyện mới chứ?</p>
+    <div class="mrow">
+      <button type="button" id="resetCancel">Huỷ</button>
+      <button type="button" class="danger" id="resetConfirm">Xoá và làm lại</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+var LEC = [{"t": "1. Tổng quan & North Star", "md": "**Bản chất công việc (khác hẳn việc \"nghe lại bản ghi có sẵn\"):** người rate (rater/annotator) **trực tiếp trò chuyện bằng giọng nói trực tiếp (live voice)** với **hai model A và B** trên **cùng một scenario**, với nội dung tương đương và số lượt tương đương, rồi đánh giá cả hai cuộc hội thoại.\n\n**North Star của dự án:** xây dựng một AI trò chuyện như một người bạn thông minh, cuốn hút — **tự nhiên (spontaneous), tự nhiên trong cách diễn đạt (natural), dễ nghe (aesthetically pleasing)**, hữu ích và chính xác — chứ không phải một AI nghe như đọc kịch bản.\n\nBa câu hỏi neo theo loại scenario (chi tiết ở Mục 7):\n\n- EQ: \"the experience is the product\" — trải nghiệm là sản phẩm.\n- IQ: \"the information is the product\" — thông tin là sản phẩm.\n- Endpointing/CD: \"the conversation flow is the product\" — dòng chảy hội thoại là sản phẩm.\n\nViệc của người rate gồm 5 bước: chuẩn bị trước hội thoại → nói chuyện với model → đánh giá cả hai cuộc hội thoại → giải thích vì sao một model vượt trội hơn → nộp task (Submit). Chi tiết ở Mục 2.\n\n---"}, {"t": "2. Quy trình 5 bước chi tiết", "md": "### Bước 1 — Trước khi hội thoại\n\n**1.1. Đọc kỹ scenario (slide \"Bước 1.1\"):**\n\n- Loại scenario (scenario type), chủ đề bắt buộc (mandatory topic).\n- Các yêu cầu **What To Do** cụ thể.\n- Loại/độ dài hội thoại (conversation type/length), số lượt yêu cầu (number of turns).\n- Yêu cầu về cảm xúc (emotions), yêu cầu nhập vai (role-play requirements).\n- Mục **Skills Tested** — kỹ năng mà scenario này kiểm tra.\n\n*Ví dụ scenario trên slide:* Topic Switch / Hybrid / Long / Expected Vietnamese — nhập vai Nguyễn Trãi, sau đó thoát vai và hỏi ông thực sự đã đạt được gì, đâu là sự thật đâu là truyền thuyết.\n\n**1.2. Lên MỘT kế hoạch chung cho cả hai model (slide \"Bước 1.2\"):**\n\n- Cùng một bối cảnh và mức độ chi tiết, số lượt tương đương cho cả hai model — vì tính công bằng (fairness) của phép so sánh.\n- **Định nghĩa turn:** 1 lượt hỏi của người dùng = 1 turn; 1 lượt trả lời của model = 1 turn. **Số lượt tối thiểu của scenario chỉ tính lượt của rater (user turns)** — không tính lượt của model (deck Common Errors nhấn mạnh lại điểm này).\n- **Không dừng lại** cho đến khi mọi yêu cầu của scenario đã hoàn thành và các kỹ năng đã được kiểm tra — dừng sớm thì task **FAIL**.\n- Cảnh báo: tránh chêm các từ tiếng Anh phổ biến (\"Hi, hey, okay…\") vào lời nói tiếng Việt — có thể kích hoạt model nói/chêm tiếng Anh theo.\n- Transcript và bản ghi âm chỉ xuất hiện **sau khi cả hai cuộc hội thoại hoàn tất**.\n- Trong lúc nói với Model A, ghi nhanh vào ô **Notes** những điểm chính để tái sử dụng nhất quán khi nói với Model B.\n\n### Bước 2 — Nói chuyện với model\n\nTrò chuyện trực tiếp bằng giọng nói với từng model theo đúng kế hoạch. Toàn bộ quy tắc ứng xử của người rate ở bước này nằm ở Mục 3 — vi phạm có thể khiến task bị **auto-fail** ngay (chấm 1/5) và nặng nhất là bị cấm khỏi nền tảng.\n\n### Bước 3 — Đánh giá cả hai cuộc hội thoại\n\n**Nghe lại bản ghi là bắt buộc:** dưới transcript của model có mục \"Click to show audio\". Vấn đề nghe thấy lúc nói trực tiếp có thể **không** xuất hiện trong bản ghi cuối — **chỉ flag những lỗi thực sự có trong bản ghi**.\n\nHai công cụ hỗ trợ ở bước này:\n\n- **Factuality Guidance:** sau cả hai cuộc hội thoại, công cụ tự động kiểm tra độ chính xác sự kiện theo từng turn. Việc của rater: **kiểm chứng lại** các flag; nếu thông tin sai thì đánh dấu error cluster **Inaccuracy** và **trừ Utility nếu lỗi ở mức major**. Không phải task nào cũng có công cụ này (tuỳ chủ đề/bối cảnh). Đối xử với nó như **công cụ hỗ trợ, không phải phán quyết tuyệt đối** — tự đánh giá mức độ nghiêm trọng và tính liên quan; nếu flag sai sau khi kiểm chứng, giải thích ngắn gọn phát hiện của mình trong rationale.\n- **Conversation Timeline (Timeline View):** làm nổi bật các điểm ngắt lời (interruptions), độ trễ (latency) và động lực tương tác — đặc biệt hữu ích với scenario loại **Endpointing** và **Conversational Dynamics**.\n\nViệc đánh giá dùng 5 tiêu chí + Task Success (Mục 4), các error clusters (Mục 5) và giao diện Ranking Interface: mỗi dimension chọn Response A / Response B (riêng Utility và Audio Quality có thêm Both Good / Both Bad; Conversational Dynamics có thêm Tie / Skip), kèm **Task Success: Pass / Fail / Partial cho từng model**.\n\n### Bước 4 — Giải thích vì sao một model vượt trội hơn\n\nViết **rationale**: tối thiểu **100 ký tự**, biện minh lựa chọn cho **từng dimension**, có bằng chứng cụ thể (ví dụ \"Model A turn 3\", \"Model B 0:45\"). Cấu trúc và quy tắc đầy đủ ở Mục 8.\n\n### Bước 5 — Submit task\n\nNộp sau khi đã hoàn tất ratings, Task Success, error clusters và rationale cho cả hai model.\n\n---"}, {"t": "3. Quy tắc người rate — 4 lỗi auto-fail (deck Common Errors)", "md": "Deck Common Errors chấm **chính người rate**. Bốn hành vi sau khiến task **auto-fail (1/5)**; riêng hành vi phá hoại/gian lận còn có thể dẫn tới **bị loại khỏi nền tảng (ban/removal)**.\n\n### 3.1. Scenario Adherence — không bám sát scenario\n\nYêu cầu: thực hiện chính xác kịch bản được giao để kiểm tra đúng kỹ năng. Đi lệch khỏi mục tiêu chính của prompt thì dữ liệu mất giá trị sử dụng. Các vấn đề chính:\n\n1. **Không đủ số lượt thoại tối thiểu** — số lượt chỉ tính lượt của rater; các scenario yêu cầu **15+ lượt** là nhóm hay bị kết thúc quá sớm nhất.\n2. **Bỏ qua trình tự bắt buộc** — scenario yêu cầu 3 giai đoạn / interruption / challenge / debate nhưng chỉ hoàn thành một phần.\n3. **Sai chủ đề hoặc tự tạo game/constraint riêng** — annotator tự đổi chủ đề hoặc tự đặt luật chơi của mình.\n4. **Thực hiện đúng scenario với một model nhưng không với model còn lại** — cả hai cuộc hội thoại đều phải tuân thủ đầy đủ.\n5. **Không test đúng loại scenario** — ví dụ task yêu cầu tìm kiếm thông tin/IQ nhưng không có thông tin nào có thể fact-check được; hoặc roleplay mà vai trò của các bên bị đảo ngược.\n\n**Ví dụ QA 1 — đảo vai trong roleplay khủng hoảng:** Scenario yêu cầu **model** đóng vai một nhân vật gặp khủng hoảng (đắm tàu, cháy nhà, đại dịch zombie) và đang hoảng loạn; cần xem model có duy trì sự căng thẳng trong giọng nói (thở nhanh, run run, cấp bách) trong khi vẫn mạch lạc và hữu ích hay không. QA's comment: ở user turns 1, 3 và 5 trong **cả hai** cuộc hội thoại, rater lại **tự đóng vai người bị kẹt trong đám cháy và yêu cầu cứu hộ khẩn cấp**; vai hoảng loạn dự định của model không bao giờ được thiết lập một cách có ý nghĩa. Hậu quả: tương tác kiểm tra kỹ năng hỗ trợ khẩn cấp thay vì kỹ năng nhập vai; phản hồi bình tĩnh của model không thể chứng minh model không tuân thủ một vai chưa hề được giao. → Chạm ngưỡng **auto-fail** Scenario Adherence.\n\n**Ví dụ QA 2 — bỏ bước bắt buộc (nấu ăn):** Scenario yêu cầu: model hướng dẫn nấu một món ăn từng bước; **ngắt lời để hỏi câu hỏi làm rõ**; yêu cầu model **nhắc lại một bước**. QA's comment: rater **không hề ngắt lời model nào trong lúc model đang nói** — câu hỏi về nguyên liệu chỉ đến **sau khi** mỗi model đã nói xong; và hỏi lại danh sách nguyên liệu **không được tính rõ ràng** là yêu cầu nhắc lại một bước nấu. → Không thực hiện đầy đủ scenario được giao.\n\n*Đề xuất của slide:* đảm bảo đủ số lượt tối thiểu (chỉ tính lượt rater); hoàn thành **tất cả** các bước được yêu cầu; bám sát chủ đề và các yêu cầu/giới hạn được giao, không tự tạo thêm; tuân thủ **cùng một** yêu cầu scenario với cả hai model.\n\n### 3.2. Scenario Coherence — thiếu nhất quán giữa hai cuộc hội thoại\n\nYêu cầu: đảm bảo nội dung nhất quán về mặt logic trong suốt kịch bản. **Auto-fail nếu hai model được cung cấp các chủ đề khác nhau.** Các vấn đề thường gặp:\n\n- Hai kịch bản khác biệt đáng kể, làm thay đổi quy trình đánh giá từ góc nhìn của User.\n- User không cố gắng hết sức để duy trì tính nhất quán.\n- **Chênh lệch quá lớn về độ dài hội thoại giữa hai model** — theo nguyên tắc chung, **chênh lệch độ dài trên 50% được xem là quá lớn → auto-fail**.\n\n*Đề xuất của slide:* không tự mâu thuẫn với bối cảnh đã thiết lập; không cố tình đưa ra prompt dễ cho một model nhưng lại đặt yêu cầu phức tạp không có lý do cho model còn lại; không mâu thuẫn, chuyển ý phi logic hoặc có phản ứng mà một người dùng thực tế sẽ không có.\n\n**Ví dụ QA 1 — ràng buộc không nhất quán (chuyến bay Tân Sơn Nhất):** Scenario: bạn phải bay ngày mai và nghe có chậm chuyến ở sân bay — chuyện gì đang xảy ra và bạn có nên đặt lại vé không? QA's comment: scenario có **hai yêu cầu cốt lõi**: (1) chuyện gì đang xảy ra ở sân bay, và (2) có nên đặt lại vé không (\"bạn có nên đặt lại vé không?\"), với kỹ năng được kiểm tra là \"hỗ trợ quyết định thực tế\". **Model B nhận được câu hỏi đặt lại vé ở T3** (\"Thế bây giờ mình có nên hủy vé… hoặc đổi giờ bay ngay bây giờ luôn không?\"), nhưng **Model A không bao giờ nhận được câu hỏi đó** — các user turns của A chỉ gồm kiểm tra tình hình (T1, T5), giờ khởi hành (T3) và bản tóm tắt \"3 việc cần làm\" (T7). Rater sau đó lại cộng điểm cho Model B trong Utility rationale vì đã \"khuyên người dùng không nên vội trả phí đặt lại vé\" — một câu hỏi mà Model A chưa từng được hỏi. Hai model không được trao cơ hội tương đương, nên phép so sánh bị thiên lệch (biased). → Chạm ngưỡng Scenario Coherence.\n\n**Ví dụ QA 2 — hai game sáng tạo khác nhau:** Scenario: tự nghĩ ra một kịch bản sáng tạo hoặc vui chơi (trò chơi, bài tập sáng tạo, thử thách vui), có cuộc trò chuyện tự nhiên trong hơn 3 lượt. QA's comment: hai model được giao **hai game sáng tạo khác nhau** — Model A thiết kế kính khiến người khác trông như đang nhảy, kiểm tra trong bối cảnh phỏng vấn xin việc, cộng thêm quảng cáo TV 30 giây và góc nhìn mắt mèo; Model B thiết kế tai nghe biến tiếng ồn thành nhạc jazz, kiểm tra trong thư viện yên tĩnh, chỉ với một slogan và bản tóm tắt. Phát minh, bối cảnh và các follow-up task đều khác nhau, nên việc prefer các scenario hài hước của B là so sánh hai task khác nhau. Trong scenario kiểm tra tính sáng tạo, **cả hai model phải nhận cùng một tiền đề (same premise)**.\n\n### 3.3. Scripted Behaviour — hành vi theo kịch bản soạn sẵn\n\nYêu cầu: tương tác một cách tự nhiên và theo thời gian thực; **tuyệt đối không đọc văn bản soạn sẵn cho cả hội thoại**. Tương tác theo kịch bản có sẵn sẽ loại bỏ tính khó đoán mà AI cần xử lý trong các tình huống thực tế. Các vấn đề thường gặp:\n\n- **Đi theo kịch bản cứng nhắc hoặc hội thoại soạn sẵn (auto-fail):** không điều chỉnh cách tương tác khi phản hồi của model làm thay đổi ngữ cảnh hoặc khiến kịch bản không còn phù hợp.\n- **Cố tình bỏ qua** những phản hồi hoặc bằng chứng.\n- **Lặp lại nguyên văn (Verbatim repetition):** lặp lại nguyên văn các hướng dẫn trong prompt (auto-fail).\n- **Cố tình dẫn dắt (Intentional steering):** cố tình hướng một model đến kết quả mong muốn, gây thiên lệch cho việc đánh giá.\n\n*Đề xuất của slide:* trò chuyện tự nhiên theo câu hỏi follow-up và câu trả lời của model; duy trì tính trung lập và đảm bảo cả hai model có điều kiện đánh giá tương đương; đánh giá tất cả phản hồi và bằng chứng một cách công bằng, không thiên vị.\n\n**Ví dụ QA — \"Defensive Scripting\" (giọng trầm):** Scenario: yêu cầu model nói bằng giọng trầm nhất có thể, trò chuyện đôi câu, đánh giá xem model có chuyển tông giọng một cách thuyết phục không. QA's comment: bài nộp fail ở lỗi Defensive Scripting — rater dùng các câu soạn sẵn với cả hai model bất kể model nói gì. Ở Model B T3, rater khen giọng trầm của B (\"Wow, giọng trầm cũng nghe cũng ngầu đấy\"), nhưng T2 của B **không hề trầm** — chính rationale của rater ghi B \"switched to a high pitched, affected female tone in turns 2 and 6\". Câu soạn sẵn đã cộng điểm cho B vì điều B không làm. Rater cũng không hề nhắc B sửa tông giọng — trong khi đó chính là phản ứng tại chỗ (in-the-moment reaction) mà scenario kiểm tra khả năng steer này yêu cầu.\n\n### 3.4. Adversarial User — người dùng đối kháng / phá hoại\n\nYêu cầu: không cố tình phá hoại, đánh lừa hoặc gây cản trở model; đánh giá phải phản ánh hành vi thực tế và tự nhiên của người dùng. **Tất cả các trường hợp mắc lỗi Adversarial đều auto-fail.** Các hành vi phá hoại có hệ thống mà slide liệt kê:\n\n- **Sử dụng LLM để tạo câu trả lời hoặc hội thoại** thay vì tự tạo nội dung.\n- **Sử dụng giọng AI** để nói chuyện với model.\n- **Sử dụng AI để làm bước đánh giá và/hoặc viết rationale.**\n\n*Đề xuất của slide:* đảm bảo đánh giá công bằng, không có hành vi cố tình gian lận hoặc phá hoại; **tuyệt đối không sử dụng công cụ AI**; đảm bảo tính toàn vẹn của ngữ cảnh (Contextual Integrity).\n\n**Ví dụ QA 1 — giọng TTS (lập lịch sự kiện):** Scenario: ngày mai bạn tổ chức một sự kiện, hãy tính ngược từ giờ bắt đầu để lập lịch chuẩn bị theo từng giờ kèm phương án dự phòng. QA's comment: phía user của cả hai cuộc hội thoại có vẻ được tạo bởi **ứng dụng text-to-speech hoặc voice app của bên thứ ba** chứ không phải giọng trực tiếp của annotator — cách nói robotic, mang phong cách AI-narration xuyên suốt, và giọng **đột ngột chuyển từ giọng miền Nam sang giọng miền Bắc** ở Model A T5 và Model B T9, rồi quay lại giọng miền Nam ở các turn khác. Giọng của một người nói thật không thay đổi giữa các turn như vậy.\n\n**Ví dụ QA 2 — tiếng ồn nền (game 20 câu hỏi):** Scenario: khi đang nhập vai, hãy tạm dừng hoàn toàn và chuyển sang trò chơi đoán vật thể qua 20 câu hỏi không liên quan. QA's comment: input của rater chứa **tiếng ồn nền lớn và kéo dài** trong cả hai cuộc hội thoại, khiến model liên tục **dừng giữa câu** như thể bị ngắt lời (thường chỉ sau 1–2 giây) và làm hỏng game 20 câu hỏi lặp đi lặp lại. Theo guidelines, tiếng ồn phía rater khiến model \"misbehave\" (dừng giữa câu vì tưởng mình bị ngắt lời) được xếp vào **Scenario Adherence**; hai model đã không được trao cơ hội công bằng và sạch để hoàn thành task. *(Slide này nằm trong mục ví dụ Adversarial User nhưng QA xếp lỗi vào Scenario Adherence — ghi lại đúng như slide.)*\n\n**Quy tắc nền từ deck chính (Bước 2):** các vi phạm phía rater — đi lệch scenario, đọc kịch bản soạn sẵn, cố tình đánh lừa model, có nhạc nền/TV, dùng voice changer/speech synthesis — khiến task bị chấm fail ngay (1/5) và có thể bị cấm khỏi nền tảng.\n\n---"}, {"t": "4. Năm tiêu chí đánh giá + Task Success", "md": "Trên Ranking Interface, rater đánh giá 5 dimension và chấm Task Success cho từng model:\n\n| Tiêu chí | Chấm cái gì |\n|---|---|\n| **Naturalness / Engagement / Aesthetics (NEA)** | Giọng được **truyền tải như thế nào** |\n| **Utility** | **Chất lượng thông tin** |\n| **Conversational Dynamics (CD)** | Model **tương tác và xử lý lượt nói** như thế nào |\n| **Audio Quality** | Chất lượng **âm thanh đầu ra của model** |\n| **Overall Preference** | Model nào được prefer tổng thể |\n| **Task Success** (theo từng model) | Pass / Fail / Partial |\n\n### 4.1. Định nghĩa từng tiêu chí\n\n- **NEA — Naturalness / Engagement / Aesthetics:** là **cách giọng được truyền tải (HOW the voice is delivered)**. Gồm: độ giống người (human-likeness: ngữ điệu/intonation, nhịp/rhythm, hơi thở tự nhiên), sự thân thiện (friendliness), và kết nối cảm xúc (emotional connection).\n- **CD — Conversational Dynamics:** là **cách model tương tác và xử lý việc chuyển lượt (turn-taking)** — logic về thời điểm: khi nào nói, khi nào nhường, khi nào ngắt lời. Có thể hiểu là \"nhịp của tương tác\" (rhythm of interaction).\n- **Utility:** chỉ là **chất lượng thông tin** — chính xác (accurate), hữu ích (useful), liên quan (relevant), đủ cụ thể (specific enough) và mạch lạc (coherent).\n- **Audio Quality:** chất lượng âm thanh đầu ra của model (chi tiết ở Mục 6).\n- **Overall Preference:** lựa chọn tổng thể giữa A và B, được dẫn dắt bởi thứ tự ưu tiên theo loại scenario (Mục 7) và mức độ nghiêm trọng thực tế của lỗi.\n- **Task Success:** model có đáp ứng **mọi lớp (ALL layers)** của yêu cầu người dùng trong mỗi turn hay không — bao gồm cả tông cảm xúc phù hợp (với task thiên EQ) — và không hiểu sai ý định của người dùng.\n\n### 4.2. Phân biệt NEA và CD — không bao giờ suy lỗi chéo\n\nNguyên tắc lõi: **NEA = cách giọng được truyền tải; CD = cách model xử lý tương tác.** Không suy một dimension có lỗi từ lỗi của dimension kia; chỉ trừ **cả hai** khi có **bằng chứng riêng** cho từng dimension.\n\n| Tình huống | Trừ dimension nào |\n|---|---|\n| Giọng robotic/đều đều (monotone) nhưng chuyển lượt tốt | Chỉ **NEA** |\n| Giọng tự nhiên, thân thiện nhưng ngắt lời người dùng | Chỉ **CD** |\n| Giọng lạnh lùng đáp lại một câu chuyện buồn, chuyển lượt đúng | Chỉ **NEA** |\n| Phản hồi quá chậm (từ 4 giây) nhưng giọng tự nhiên | Chỉ **CD** (lỗi latency) |\n| Quá nhiều filler / nói chồng lên người dùng / câu bị phân mảnh | **NEA** nếu cách truyền tải nghe không tự nhiên; **CD** nếu nó ảnh hưởng tiêu cực tới tương tác, ngắt lời hoặc chia nhỏ lượt nói |\n\n### 4.3. Phân biệt Task Success và Utility — ví dụ nhà hàng Hà Nội\n\nNguyên tắc: **lỗi chính xác (accuracy) ảnh hưởng tới Utility; KHÔNG trừ Task Success vì các vấn đề chính xác/chất lượng thuộc phạm vi của Utility — TRỪ KHI lỗi đó ảnh hưởng tới cách model hoàn thành yêu cầu của người dùng.**\n\n- **Trường hợp 1:** scenario chỉ yêu cầu **kể tên 5 nhà hàng nổi tiếng ở Hà Nội**. Model kể đủ 5 tên và tự thêm địa chỉ, trong đó **1 địa chỉ bị bịa (fabricated)**. → **Task Success KHÔNG bị trừ** (yêu cầu trực tiếp đã hoàn thành; địa chỉ thêm vào không phải yêu cầu bắt buộc); **Utility bị trừ** và **Inaccuracy = Yes**.\n- **Trường hợp 2:** cùng dữ kiện, nhưng scenario yêu cầu **cả tên lẫn địa chỉ**. → **Task Success cũng bị trừ**, vì một yêu cầu bắt buộc không được hoàn thành.\n\n### 4.4. Một phán quyết QA về \"suy lỗi chéo\" (ví dụ sai rating Conversational Dynamics)\n\nAnnotator chấm CD \"Model A preferred\" và trừ CD của Model B vì B trả lời bằng tiếng Anh ở T2 và T6 và không tự sửa lỗi lệch ngôn ngữ — cho rằng việc này phá vỡ dòng hội thoại. QA sửa: cả hai model đều xử lý chuyển lượt tốt, không tạo độ trễ đáng kể, nên CD phải là **Tie**; các khoảng dừng dưới 3 giây của A cũng không đạt ngưỡng trừ điểm Latency. Điểm mấu chốt: **lỗi \"Wrong Language\" không thuộc về Conversational Dynamics** — nó thuộc Task Success và error cluster Wrong Language (xem Mục 5).\n\n---"}, {"t": "5. Error Clusters — danh sách đầy đủ, ánh xạ và ngưỡng", "md": "Ở Bước 3, ngoài ratings, rater còn phải tick các **Error Cluster** tương ứng cho từng model trên giao diện (checkbox A/B). Có 3 nhóm:\n\n### 5.1. Model Generation\n\n| Cluster | Định nghĩa trên slide |\n|---|---|\n| **Bridging Quality** | Dùng cùng một câu đệm \"stock filler phrase\" với cùng một ngữ điệu (identical prosody) ở mọi lần chuyển ý |\n| **Looping / LLMism** | Các câu cửa miệng kiểu LLM/nịnh nọt (catchphrases/sycophancy) hoặc bị kẹt lặp đi lặp lại |\n| **Interrupted User** | Model ngắt lời người dùng (xem quy tắc backchannels ở 5.4) |\n| **Instruction Following Quality** | Chất lượng tuân thủ chỉ dẫn/yêu cầu |\n| **Inaccuracy** | Thông tin sai sự kiện |\n| **Anthropomorphism** | Model tuyên bố có trải nghiệm/ký ức/danh tính của người thật (deck Common Errors gọi nhóm lỗi này là **Embodiment** — model tuyên bố có những trải nghiệm thực tế mà AI không thể có) |\n| **Failed Correction** | Bỏ qua việc người dùng sửa lỗi / mất trí nhớ ngắn hạn (short-term memory loss) |\n| **Overreacted** | Cao độ/tốc độ/cảm xúc quá mức, hoặc thay đổi tông đột ngột giữa các turn |\n| **Wrong Language** | Trả lời sai ngôn ngữ yêu cầu (xem ngưỡng ở 5.4) |\n\n### 5.2. Model Discrimination\n\n| Cluster | Định nghĩa trên slide |\n|---|---|\n| **Bad ASR / Misunderstanding** | Nghe sai (mishears) hoặc hiểu sai ý định/bối cảnh của người dùng; ở phía transcript: từ ngữ bị chuyển thành văn bản sai khiến ý định của người nói bị hiểu sai |\n| **Latency** | Model phản hồi chậm — chỉ flag khi trễ **từ 4 giây** (xem 5.4) |\n\n### 5.3. i18n Only\n\n| Cluster | Định nghĩa trên slide |\n|---|---|\n| **Not Locally Relevant** | Tham chiếu/ví dụ/giả định không áp dụng được cho locale của người dùng — không sai về sự kiện, nhưng không liên quan về văn hoá |\n| **Wrong Accent / Variant** | Giọng/biến thể không đúng với locale kỳ vọng |\n| **Wrong Gender** | Giới tính giọng không khớp (ví dụ giọng nữ chuyển thành giọng nam — xem ánh xạ ở 5.4) |\n\n### 5.4. Bảng ánh xạ Error Cluster → dimension bị trừ + các ngưỡng phải nhớ\n\n| Cluster | Ánh xạ / ngưỡng |\n|---|---|\n| **Interrupted User** | → **Conversational Dynamics** |\n| **Instruction Following Quality** | → **Task Success** |\n| **Inaccuracy** | → **Utility** |\n| **Wrong Language** | → **Task Success, KHÔNG phải CD**. Luôn flag cluster Wrong Language. **Task Success = Fail:** model không thể chuyển sang đúng ngôn ngữ hoặc cần **hơn 1 lần nhắc**. **Task Success = Partial:** model tự chuyển sang đúng ngôn ngữ hoặc chuyển đúng sau **1 lần nhắc** |\n| **Latency** | Chỉ flag khi model trễ **≥ 4 giây**; lỗi phản hồi chậm thuộc **CD** |\n| **Wrong Accent / Variant** | → **Naturalness (NEA)** |\n| **Wrong Gender** | → **Audio Quality** khi giọng nữ chuyển thành giọng nam |\n\nVới các cluster còn lại, slide không cho ánh xạ dimension riêng — vẫn phải flag cluster khi có lỗi và giải thích trong rationale vì sao bằng chứng khớp với định nghĩa của cluster đó.\n\n**Mức độ nghiêm trọng (severity):** Minor, Moderate, Major — tra guidelines để biết lỗi nào thuộc mức nào. (Xem thêm lưu ý ở Mục 8: bản cập nhật rationale 10/01 nói không cần nêu mức severity của lỗi Audio Quality và Error Cluster trong rationale.)\n\n**Lỗi Minor:** việc flag Error Cluster là **không bắt buộc (optional)** — nhưng vẫn nên nhắc tới lỗi trong rationale.\n\n**Ví dụ QA — bỏ sót cluster Looping/LLMism:** Scenario lên kế hoạch bữa tiệc (chủ đề, hậu cần, danh sách khách, đồ ăn, lịch trình; thêm biến số giữa chừng như khách bị dị ứng, ngân sách giảm một nửa, đổi địa điểm). Annotator đánh dấu Looping / LLM-ism = **No** cho cả hai model. QA sửa thành **Yes** — mức **Moderate**: model dùng cùng một cấu trúc câu hỏi follow-up **\"Thấy ổn chưa, hay…?\"** ở các turn **6, 8, 10, 12, 14, 16, 18**. Bài học: phải nghe xuyên suốt cả cuộc hội thoại để bắt các mẫu lặp, không chỉ nghe từng turn rời rạc.\n\n### 5.5. Quy tắc backchannels — khi nào KHÔNG phải Interrupted User\n\nCác câu đệm ngắn mang tính khích lệ (**\"à\", \"ừm\", \"ừ\", \"đúng rồi\"…**) hoặc cách diễn đạt tương đương tự nhiên trong tiếng Việt đều **được chấp nhận**; chúng thậm chí cho thấy model đang chủ động lắng nghe tốt, **miễn là người dùng vẫn có thể tiếp tục nói mà không bị gián đoạn**.\n\n- Câu đệm tách thành một turn riêng của model **không tự động** được xem là lỗi **Interrupted User**.\n- Chỉ đánh dấu cluster Interrupted User khi câu đệm hoặc phần lời nói chồng lấn **thực sự làm gián đoạn** cuộc hội thoại, chẳng hạn:\n  - Người dùng dừng lại, ngập ngừng, bắt đầu nói lại hoặc lặp lại lời nói; model thực sự bắt đầu một lượt thoại có nội dung (dù chỉ một từ);\n  - Phần lời nói chồng lấn che lấp lời người dùng; hoặc model bỏ sót nội dung người dùng nói.\n\n---"}, {"t": "6. Audio Quality — cách chấm", "md": "**Phạm vi:** chỉ chấm âm thanh đầu ra **của model** — KHÔNG chấm âm thanh của người dùng hay tiếng ồn nền phía người dùng. Chấm từng model **độc lập trước**, rồi mới so sánh.\n\n**Nguyên tắc chọn lỗi:** chỉ flag những vấn đề thực sự đáng chú ý; cân nhắc **mức độ nghiêm trọng × tần suất (severity × frequency)** — một lỗi nghiêm trọng rõ ràng duy nhất, hoặc một lỗi nhẹ lặp lại nhiều lần, đều có thể bị flag.\n\n**Bảng quyết định:**\n\n| Model A | Model B | Kết quả |\n|---|---|---|\n| Fine | Fine | **Both good** |\n| Fine | Bad | Prefer model Fine |\n| Bad | Bad (một bên rõ ràng tệ hơn) | Prefer bên ít tệ hơn |\n| Bad | Bad (tệ ngang nhau) | **Both bad** |\n\n- **\"Both good\"** = không model nào có vấn đề rõ ràng (khác biệt Minor/None là không đáng kể).\n- **\"Both bad\"** = cả hai đều có vấn đề rõ ràng (mức Moderate/Major) và không bên nào rõ ràng tệ hơn.\n- Khi prefer giữa hai model đều có lỗi: nêu trong rationale rằng cả hai đều có vấn đề nhưng model được chọn **ít nghiêm trọng hơn / ít thường xuyên hơn**.\n- Prefer model còn lại nếu model đó không có lỗi hoặc chỉ có một lỗi minor; nếu cả hai chỉ có lỗi minor → **Both good**.\n\n**Ví dụ lỗi mức Major trên slide:**\n\n- Vấn đề âm thanh nghiêm trọng xuyên suốt toàn bộ đoạn audio.\n- **Persona Shift** — giọng chuyển nữ → nam → nữ.\n\n**Cách trích bằng chứng âm thanh:** lấy từ **Recordings hoặc Timeline View** — ví dụ \"Timeline View 2:15, 4:07\"; \"Recordings: Turn 2 at 00:05, Turn 6 at 00:32\". Trong ví dụ rationale tốt (Mục 8), phần Audio Quality liệt kê **từng** artifact kèm mốc thời gian (tiếng tick, warbling, plosive…) cho cả hai model rồi mới kết luận bên nào ít và nhẹ hơn.\n\n---"}, {"t": "7. Thứ tự ưu tiên theo loại scenario", "md": "Thứ tự ưu tiên quyết định cách chốt **Overall Preference**. Cách chấm từng dimension không đổi — chỉ thứ tự ưu tiên giữa các dimension thay đổi theo loại scenario:\n\n| Loại scenario | Thứ tự ưu tiên | Câu neo |\n|---|---|---|\n| **EQ** | **NEA > Utility > Audio Quality** | \"The experience is the product\" |\n| **IQ** | **Utility > NEA > Audio Quality** | \"The information is the product\" |\n| **Hybrid** | Cân bằng cả hai — tự hỏi: \"người dùng muốn đạt được điều gì từ tương tác này?\" | — |\n| **Endpointing / CD** | **CD > Naturalness > Audio Quality** | \"The conversation flow is the product\" |\n\n**Nguyên tắc trade-off — ưu tiên KHÔNG phải tuyệt đối:** phải cân nhắc mức độ nghiêm trọng (severity) và tác động thực tế lên mục tiêu của người dùng.\n\n- Trong task EQ: nếu Model A rất tự nhiên nhưng đưa thông tin sai/không hữu ích tới mức ảnh hưởng đáng kể nhu cầu của người dùng hoặc gây hiểu lầm → **prefer B** (robotic hơn nhưng hữu ích).\n- Nếu thông tin sai của A chỉ là chi tiết nhỏ, không ảnh hưởng mục tiêu của người dùng → A vẫn có thể thắng nhờ Naturalness.\n- *Ví dụ trên slide:* người dùng vừa chia tay, cần được an ủi. Model A tự nhiên nhưng lại đổ lỗi/mắng người dùng → fail Utility. Model B robotic hơn nhưng an ủi thành công → **prefer B**.\n\n**Thứ tự mặc định ở slide kết (Final Thoughts):** khi quyết định overall response rating, ưu tiên theo hệ thứ bậc **Naturalness/Engagement > Utility > Task Success**. Đây là khung mặc định chung; khi scenario thuộc một loại cụ thể ở bảng trên, dùng thứ tự của loại đó và giải thích trade-off trong rationale.\n\n**Ví dụ minh hoạ cách lý luận Overall (slide Ranking Interface):** prefer A vì ở turn 2, A chậm nhịp lại và hạ tông giọng khi người dùng đang tâm sự (venting) — nghe như đang lắng nghe; B giữ tông vui vẻ (upbeat) — bị đánh giá là tone-deaf. Utility của hai bên ngang nhau; không có vấn đề âm thanh; độ conversational tương tự; cả hai đều xử lý được một lần ngắt lời giữa câu ở turn 3.\n\n---"}, {"t": "8. Viết rationale — template chính thức (Update 10/01)", "md": "### 8.1. Thế nào là một rationale đạt\n\n- **Rõ ràng và có căn cứ (clear and grounded):** giúp reviewer có đủ thông tin để hiểu và xác minh các lựa chọn mà không cần phỏng đoán.\n- Tập trung vào **ratings** và các **issues** đã ảnh hưởng đến quá trình đánh giá.\n- Không cần dài, nhưng **phải đi kèm chứng cứ và giải thích** để biện minh cho lựa chọn.\n- Viết **bằng tiếng Anh**. Tối thiểu **100 ký tự** (quy định ở giao diện rating) và phải biện minh cho **từng dimension**.\n\n### 8.2. Rationale cần viết những gì\n\n**Phần Overall Preference:**\n\n- Nêu model được chọn (A hay B).\n- (Các) dimension **quyết định** lựa chọn đó, dựa trên loại Scenario.\n- Tại sao kết quả của các dimension đó dẫn tới model đã chọn.\n- Nếu các dimension cho kết quả khác nhau, giải thích ngắn gọn về **sự đánh đổi (trade-off)**.\n\n**Đối với mỗi dimension (NEA, Utility, Audio Quality, Conversational Dynamics) được đánh giá \"Preferred\" hoặc \"Tie (Both bad)\", mọi trường hợp Task Success ở mức Partial/Fail và mọi Error Cluster được đánh dấu, cần:**\n\n- Nêu rõ rating và model bị ảnh hưởng.\n- Cung cấp bằng chứng cụ thể: **lượt hội thoại (turn), mốc thời gian (timestamp), trích dẫn (quote) hoặc hành vi (behavior)** để làm rõ lý do đánh giá hoặc xác nhận lỗi thuộc Error Cluster tương ứng.\n- Với **Task Success:** nêu rõ yêu cầu nào đã được đáp ứng và yêu cầu nào chưa.\n- Với **Error Cluster:** giải thích vì sao bằng chứng đưa ra đáp ứng định nghĩa của nhóm lỗi đó.\n\nNgược lại: với **\"Tie (both good)\"**, **Task Success Pass** và các Error Cluster **không** được flag, việc giải thích là **không bắt buộc** hoặc chỉ cần đề cập ngắn gọn.\n\n### 8.3. Template chính thức (khuyến khích sử dụng, viết bằng tiếng Anh)\n\n```\nOverall Preference: [A preferred / B preferred]\nDecided mainly by: [dimension(s)]\nReasoning: [Why these results support the winner]\n\nUtility: [A preferred / B preferred / Tie, both bad / Tie, both good]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nAudio Quality: [A preferred / B preferred / Tie, both bad / Tie, both good]\nEvidence: Turn [#], [timestamp]: observed issue\nReasoning: [Why the evidence supports the rating]\n\nConversational Dynamics: [A preferred / B preferred / Tie, both bad / Tie, both good]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nNaturalness / Engagement / Aesthetics: [A preferred / B preferred]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nTask Success: Model [A/B] — [Pass / Partial / Fail]\nEvidence: [What was completed or missed] [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nFlagged Error Cluster: [Cluster name] — Model [A/B]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\n[How it meets the cluster definition]\n```\n\n### 8.4. Quy tắc số lượng bằng chứng — \"Bao nhiêu bằng chứng là đủ?\"\n\n- Vấn đề xảy ra **dưới 3 lần**: **liệt kê đầy đủ** các ví dụ cho từng bằng chứng.\n- Vấn đề xảy ra **từ 3 lần trở lên**: đưa ra **số lượng tổng ước tính** và liệt kê **ít nhất 3 ví dụ** cho mỗi bằng chứng.\n\n### 8.5. Lưu ý từ bản Update 10/01\n\n- Với **Preferred / Tie (both bad)**: phải cung cấp lý do và bằng chứng để giải thích cho lựa chọn.\n- Việc rate Audio Quality và các Error Cluster **vẫn như cũ**. Điểm khác duy nhất: **không nhất thiết phải nêu trong rationale mức độ nghiêm trọng** của các lỗi Audio Quality hoặc Error Clusters — Major, Moderate hay Minor.\n\n### 8.6. Ví dụ rationale TỐT (slide \"Good Rationale Example\", Bước 4)\n\nMột rationale theo đúng template (ví dụ từ một task locale khác):\n\n- **Overall Preference: MB preferred.** Decided mainly by: **Naturalness**. Reasoning: MB nghe ấm áp hơn MA, và các câu đáp trả (rebuttals) của MB mang tinh thần thể thao hơn của MA.\n- **Utility: Tie, both good.** Reasoning: cả hai model đều đáp lại cảm xúc và các câu đáp trả của người dùng xuyên suốt các turn.\n- **Audio Quality: MB preferred.** Evidence liệt kê **từng artifact kèm mốc thời gian cho cả hai model** (MA: turn 2 — 0:00, 0:12 tick, 0:00 warbling; turn 4 — 0:00–0:03 warbling, 0:08–0:09, 0:11 tick; turn 6 — 0:12 tick; turn 8 — 0:04 warbling, 0:11 plosive sound, 0:12 tick; MB cũng có danh sách tương tự nhưng ít hơn). Reasoning: MB có ít artifact âm thanh hơn và nhẹ hơn MA — chỉ vài tiếng tick ở T2 (0:08) và T6 (0:15).\n- **Conversational Dynamics: Tie, both good.** Reasoning: cả hai model đều hội thoại không gián đoạn với người dùng xuyên suốt các turn.\n- **Naturalness / Engagement / Aesthetics: MB preferred.** Evidence: turn 2 của cả MA và MB. Reasoning: cả hai đều tự nhiên, nhưng câu mở đầu của MA ở turn 2 nghe đã quá cạnh tranh (too competitive), trong khi câu của MB ở turn 2 toát lên tinh thần thể thao (sportsmanship).\n- **Task Success: MA — Pass; MB — Pass.** Reasoning: cả hai model đều đáp lại các rebuttals của người dùng bằng một persona cạnh tranh — đúng kỹ năng được kiểm tra trong task này.\n- **Flagged Error Cluster: No errors.**\n\n*Vì sao bản này đạt (theo slide):* bám template; liệt kê mọi AQ artifact kèm timestamp; so sánh NEA bằng trích dẫn của cả hai model.\n\n### 8.7. Ví dụ rationale KÉM — \"Non-evidence-based Justification\" (kèm ghi chú QA)\n\nRationale gốc của annotator: prefer Model A overall vì A \"correctly followed the requested language\" và cung cấp vài sự kiện gần đây đáng chú ý, có hỏi follow-up giúp người dùng nhớ lại thông tin; Model B trả lời hoàn toàn bằng tiếng Anh, \"made a critical error\" khi không theo ngôn ngữ yêu cầu; Model A có ngắt lời ngắn ở T2 (0:08) nhưng dường như vô ý. QA chỉ ra các điểm phải sửa:\n\n1. Phải **nêu rõ dimension nào hỗ trợ** lựa chọn Model A là Overall Preference và giải thích vai trò của từng dimension đối với kết quả cuối cùng.\n2. \"Model A correctly followed the requested language\" cần **bằng chứng cụ thể**: xác định turn liên quan và giải thích việc Model B dùng tiếng Anh ảnh hưởng đến hiệu suất như thế nào, bao gồm dimension và Error Cluster tương ứng nếu có.\n3. \"Provided several notable recent events\" **quá chung chung**: phải đưa ví dụ cụ thể từ cuộc hội thoại, giải thích vì sao thông tin cập nhật của A tốt hơn thông tin lỗi thời của B và xác định dimension liên quan (**Utility**).\n4. \"Asked follow-up questions to help the user recall relevant information\" cần bằng chứng cụ thể: nêu turn hoặc quote liên quan và giải thích hành vi này cải thiện câu trả lời như thế nào.\n5. \"Model B made a critical error\" còn **mơ hồ**: phải giải thích lỗi gì đã xảy ra, ở turn nào, thuộc dimension và Error Cluster nào.\n6. \"Model A briefly interrupted at T2 (0:08)\" cần được **gắn với dimension tương ứng (CD)** và giải thích việc ngắt lời ảnh hưởng thế nào. (Câu ghi chú cuối bị cắt ở mép dưới của ảnh chụp — nội dung chính đã nắm đủ.)\n\n### 8.8. Khung ghi nhớ 3 nhịp (từ tài liệu luyện tập của Hoàng — không phải văn bản của Outlier)\n\nĐể viết nhanh dưới áp lực thời gian, dùng khung: **(1) Verdict** — kết luận + dimension + mức độ → **(2) Evidence** — turn/timestamp + trích dẫn nguyên văn → **(3) Reasoning** — vì sao bằng chứng đó khớp định nghĩa/rubric và nó quyết định rating ra sao. Khung này tương thích với template chính thức ở 8.3.\n\n---"}, {"t": "9. Common Errors phía người rate & mức trừ điểm", "md": "Ngoài 4 lỗi **auto-fail** ở Mục 3, deck Common Errors còn chấm người rate theo các tiêu chí có trừ điểm sau. (Deck chính cũng nêu nguyên tắc chung: không nhận diện được vấn đề của model **hoặc** chấm sai thì bị **−1 điểm** khỏi tổng điểm của task.)\n\n### 9.1. Rate sai Dimension Quality — **trừ 2 điểm**\n\nTiêu chí: đánh giá và so sánh hai model qua các dimension chính — Overall Preference (quan trọng nhất), Naturalness, Utility, Audio Quality, Conversation Dynamics. Các lỗi thường gặp:\n\n- Ratings không khớp với định nghĩa rubric (do not align with rubric definitions).\n- Lựa chọn model thắng (winner choice) mâu thuẫn với phần mô tả trong rationale.\n- **Audio defects không được khai báo (not declared).** *Ví dụ trên slide:* Audio Quality được mô tả là \"Tie (both good)\" nhưng cả hai cuộc hội thoại đều có audio defects như tiếng pops/clicks.\n- Cả hai model đều được chấm **\"Pass\"** dù không đáp ứng phù hợp ý định của người dùng.\n\n*Kỳ vọng của slide:* các dimension trong rubric được xem xét đúng; các trường bắt buộc được điền đầy đủ; ratings khớp với định nghĩa rubric đã nêu.\n\n### 9.2. Thiếu/thừa Error Cluster — **trừ 1 điểm**\n\nTiêu chí: annotator xác định thiếu hoặc thừa error cluster; phải đối chiếu với **Error Cluster Taxonomy** để xác định lỗi chính xác khi rate task. Các lỗi thường gặp:\n\n- Bỏ sót một vấn đề khách quan rõ ràng, hoặc đánh giá sai vấn đề trong khi vấn đề không xảy ra ở hội thoại hoặc quá nhỏ để flag.\n- Không nhận diện được các lỗi **Embodiment** — khi model tuyên bố có những trải nghiệm thực tế mà AI không thể có.\n- Không đánh dấu các thông tin sai hoặc thiếu chính xác; hoặc đánh dấu nhầm thông tin chính xác là sai.\n- Không nhận diện được các vấn đề **Bad ASR** — chẳng hạn từ ngữ bị chuyển thành văn bản sai khiến ý định của người nói bị hiểu sai.\n\n*Đề xuất của slide:* nhận diện được các thông tin sai lệch hoặc thiếu chính xác về mặt thực tế; không bỏ sót các vấn đề liên quan đến an toàn hoặc vi phạm chính sách; các lỗi rõ ràng, có thể đo lường được đều phải được phản ánh trong phần đánh giá.\n\n### 9.3. Viết rationale không đạt (Justification Quality) — **trừ 1 điểm**\n\nTiêu chí: annotator có đưa ra rationale rõ ràng và có căn cứ để chứng minh các rating đã chọn hay không. Các lỗi thường gặp:\n\n- Rationale chung chung, mơ hồ.\n- Rationale **không được viết bằng tiếng Anh**.\n- Rationale mâu thuẫn với rating, thiếu chi tiết hoặc không có bằng chứng hỗ trợ.\n- Không có bằng chứng cụ thể: turn number, timestamp hoặc trích dẫn (quotes).\n- Không giải thích được lý do chọn dimension.\n- **Phân loại sai dimension:** gán một vấn đề vào sai dimension đánh giá — ví dụ đánh giá tone hoặc accent trong Utility thay vì NEA; hoặc lỗi méo âm thanh trong NEA thay vì Audio Quality.\n- Có flag Error Cluster nhưng không giải thích lỗi đó.\n\n*Đề xuất của slide:* đưa ra lập luận cụ thể thay vì nhận xét chung chung; đề cập đến bằng chứng có thể quan sát được từ cuộc hội thoại trong rationale; giải thích rõ ràng để làm căn cứ cho các score đã chọn và Overall Preference.\n\n---"}, {"t": "10. Checklist \"phải làm\"", "md": "### 10.1. Trước khi vào task\n\n- [ ] Kiểm tra trên Dashboard: điểm danh webinar đã được ghi nhận và task S2S đã được hệ thống tự mở khoá chưa (QM không mở thủ công được).\n- [ ] Đọc **toàn bộ** scenario: loại scenario, chủ đề bắt buộc, What To Do, loại/độ dài hội thoại, số lượt, cảm xúc, yêu cầu nhập vai — và mục **Skills Tested**.\n- [ ] Lập **một kế hoạch chung duy nhất** cho cả hai model: cùng câu mở đầu, cùng bối cảnh và mức chi tiết, cùng các bước bắt buộc, số lượt tương đương.\n- [ ] Ghi rõ các **bước bắt buộc** phải thực hiện (ví dụ: ngắt lời khi model đang nói, yêu cầu nhắc lại một bước, giai đoạn challenge/debate) — các bước này phải được làm **đúng nghĩa đen và đủ rõ** để QA nhìn vào là thấy.\n- [ ] Đếm trước số lượt tối thiểu — **chỉ tính lượt của rater**; đặc biệt cẩn thận với scenario 15+ lượt, nhóm hay bị kết thúc sớm nhất.\n- [ ] Đeo **tai nghe stereo phase-aligned** để nghe chính xác những khác biệt tinh tế giữa các model (slide Final Thoughts).\n- [ ] **Phòng yên tĩnh**: tắt nhạc nền/TV, tắt thông báo (Do Not Disturb) — tiếng ồn phía rater có thể khiến model dừng giữa câu và làm hỏng cả task.\n- [ ] Chuẩn bị ô **Notes** để ghi nhanh khi nói với Model A, tái sử dụng nhất quán cho Model B.\n\n### 10.2. Trong khi nói\n\n- [ ] Bám sát scenario được giao: không lạc chủ đề, không tự tạo game/constraint riêng, không đảo ngược vai trong roleplay.\n- [ ] **Không đọc kịch bản soạn sẵn**, không lặp nguyên văn hướng dẫn trong prompt. Phản ứng theo câu trả lời thực tế của model, trả lời câu hỏi của model, hỏi follow-up phù hợp trong phạm vi scenario.\n- [ ] Thiện chí (good faith): không cố tình đánh lừa/gài bẫy model, không dẫn dắt một model tới kết quả mong muốn, không bỏ qua phản hồi của model.\n- [ ] Chỉ dùng **giọng thật của mình**: không voice changer, không speech synthesis, không giọng AI/TTS; không dùng LLM soạn lời thoại.\n- [ ] Tránh chêm từ tiếng Anh phổ biến (\"Hi, hey, okay…\") vào lời nói tiếng Việt — có thể kích hoạt model chuyển/chêm tiếng Anh.\n- [ ] Giữ hai cuộc hội thoại **tương đương**: cùng tiền đề, cùng các câu hỏi cốt lõi (mọi yêu cầu cốt lõi của scenario phải được đặt cho **cả hai** model), độ dài chênh nhau **không quá 50%**.\n- [ ] Không dừng sớm: hoàn thành mọi yêu cầu bắt buộc và kiểm tra đủ Skills Tested với **cả hai** model.\n- [ ] Nếu model làm sai giữa chừng (ví dụ sai tông giọng, sai ngôn ngữ), **phản ứng tại chỗ** như người dùng thật — nhắc/sửa ngay trong hội thoại thay vì im lặng rồi trừ điểm sau.\n\n### 10.3. Sau hội thoại\n\n- [ ] Nghe lại **bản ghi** dưới transcript của từng model (\"Click to show audio\"). Chỉ flag lỗi **thực sự có trong bản ghi** — ấn tượng lúc nói trực tiếp không phải bằng chứng.\n- [ ] Dùng **Factuality Guidance** như công cụ hỗ trợ: kiểm chứng từng flag; thông tin sai → flag **Inaccuracy**, trừ **Utility** nếu lỗi major; flag nào sai sau kiểm chứng thì giải thích ngắn gọn trong rationale.\n- [ ] Dùng **Conversation Timeline** để kiểm tra interruptions, latency và động lực tương tác — nhất là với scenario Endpointing/CD.\n- [ ] Chấm từng dimension **độc lập**: không suy lỗi chéo giữa các dimension; muốn trừ hai dimension phải có bằng chứng riêng cho từng dimension.\n- [ ] Với **Audio Quality**: chấm từng model độc lập trước, chỉ tính âm thanh đầu ra của model; cân nhắc severity × frequency trước khi kết luận Both good / Both bad / prefer.\n- [ ] Kiểm tra error clusters theo Taxonomy: đủ (không sót lỗi rõ ràng như Inaccuracy, Embodiment, Bad ASR) và đúng (không flag lỗi không xảy ra hoặc quá nhỏ). Nhớ ngưỡng: Latency ≥ 4 giây; Wrong Language theo quy tắc Fail/Partial; backchannels không tự động là Interrupted User.\n- [ ] Viết rationale **bằng tiếng Anh** theo template chính thức (Mục 8.3), tối thiểu 100 ký tự, đủ bằng chứng theo quy tắc số lượng (<3 lần: liệt kê hết; ≥3 lần: tổng số ước tính + ≥3 ví dụ).\n- [ ] Tự rà soát trước Submit: winner trong ratings có khớp với rationale không; trường bắt buộc đã điền đủ chưa; mọi yêu cầu cốt lõi của scenario đã được đặt cho cả hai model chưa.\n\n---"}, {"t": "11. Những điều cần lưu ý — bẫy hay gặp (tổng hợp)", "md": "1. **Ấn tượng trực tiếp ≠ bản ghi.** Lỗi \"nghe thấy\" lúc nói chuyện có thể không tồn tại trong bản ghi cuối — chỉ flag lỗi có trong bản ghi, nếu không sẽ bị tính là flag thừa.\n2. **Suy lỗi chéo giữa các dimension** — bẫy bị QA nhắc nhiều nhất: giọng robotic ≠ CD kém; ngắt lời ≠ NEA kém; **Wrong Language thuộc Task Success, không phải CD**; tone/accent thuộc NEA, không phải Utility; méo âm thanh thuộc Audio Quality, không phải NEA.\n3. **Cộng điểm cho model vì điều nó chưa từng được hỏi.** Nếu một yêu cầu cốt lõi chỉ được đặt cho một model, phép so sánh mất hiệu lực (lỗi Coherence của chính rater).\n4. **Câu khen soạn sẵn không khớp thực tế** (Defensive Scripting): khen model vì điều model không làm sẽ bị QA đối chiếu với chính rationale của rater và bắt lỗi ngay.\n5. **Đếm sai lượt tối thiểu:** chỉ tính lượt của rater; scenario 15+ lượt là nhóm bị kết thúc sớm nhiều nhất.\n6. **Làm bước bắt buộc \"theo tinh thần\" thay vì đúng nghĩa đen:** ngắt lời phải xảy ra **khi model đang nói**; yêu cầu nhắc lại phải rõ ràng là nhắc lại **một bước**, không phải hỏi lại thông tin khác.\n7. **Coi Factuality Guidance là phán quyết tuyệt đối:** nó chỉ là công cụ hỗ trợ; rater phải tự kiểm chứng và tự chịu trách nhiệm về severity/relevance.\n8. **Bỏ sót mẫu lặp xuyên suốt hội thoại:** một cấu trúc câu lặp ở 7 turn khác nhau (Looping/LLMism mức Moderate) rất dễ trượt nếu chỉ nghe từng turn rời rạc. Ngược lại, một lỗi minor đơn lẻ thì flag cluster là optional.\n9. **Flag nhầm backchannels:** \"à, ừm, đúng rồi…\" là tự nhiên trong tiếng Việt và cho thấy model đang lắng nghe — chỉ là Interrupted User khi nó thực sự làm gián đoạn người nói.\n10. **Chêm tiếng Anh vào tiếng Việt khi nói:** \"Hi, hey, okay…\" có thể kích hoạt model trả lời/chêm tiếng Anh — và lỗi Wrong Language sau đó bắt nguồn từ chính rater.\n11. **Mỗi model một tiền đề trong scenario sáng tạo:** dù scenario cho phép \"tự nghĩ ra\", cả hai model vẫn phải nhận **cùng một premise**.\n12. **Winner mâu thuẫn với rationale** và **audio defects không được khai** (rate \"Tie both good\" trong khi cả hai bên đều có pops/clicks) — lỗi Dimension Quality bị trừ nặng nhất (−2đ).\n13. **Nhầm phạm vi Task Success / Utility:** thông tin bịa trong phần model *tự thêm* ngoài yêu cầu chỉ trừ Utility; nhưng nếu phần sai nằm trong *yêu cầu bắt buộc* thì trừ cả Task Success.\n14. **Âm thanh phía rater cũng làm hỏng task:** tiếng ồn nền lớn, kéo dài khiến model dừng giữa câu sẽ bị xếp vào lỗi của rater (Scenario Adherence), dù model mới là bên \"hành xử lạ\".\n\n---\n\n*Hết bài giảng. Tài liệu đi kèm: khung viết justification (`outlier-aether-justification-framework-2026-10-21.md`) và 50 bài luyện tập (`outlier-aether-practice-50-2026-10-21.md`).*"}];
+
+var INTRO = ["Lưu ý về điều kiện tasking (slide mở đầu): webinar S2S này là **MANDATORY** — điểm danh là điều kiện để được tasking; điểm danh được ghi nhận khi tham gia qua Dashboard hoặc bằng email đăng nhập Outlier. Sau webinar, hệ thống **tự động** mở khoá task S2S — QM không kích hoạt thủ công được.", "Thông tin ngoài slide (từ trang dự án trên Dashboard, không thuộc nội dung bài giảng): track VN là S2S; \"Est. time per task\" trên trang dự án hiển thị \"12 h\" — con số này **chưa xác minh** (có khả năng là cửa sổ thời gian cho mỗi task chứ không phải thời lượng một task, vì task thực tế là các đoạn hội thoại ngắn)."];
+
+var TEMPLATE_TXT = "Overall Preference: [A preferred / B preferred]\nDecided mainly by: [dimension(s)]\nReasoning: [Why these results support the winner]\n\nUtility: [A preferred / B preferred / Tie, both bad / Tie, both good]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nAudio Quality: [A preferred / B preferred / Tie, both bad / Tie, both good]\nEvidence: Turn [#], [timestamp]: observed issue\nReasoning: [Why the evidence supports the rating]\n\nConversational Dynamics: [A preferred / B preferred / Tie, both bad / Tie, both good]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nNaturalness / Engagement / Aesthetics: [A preferred / B preferred]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nTask Success: Model [A/B] — [Pass / Partial / Fail]\nEvidence: [What was completed or missed] [turns, timestamps, quotes, or specific behaviors]\nReasoning: [Why the evidence supports the rating]\n\nFlagged Error Cluster: [Cluster name] — Model [A/B]\nEvidence: [turns, timestamps, quotes, or specific behaviors]\n[How it meets the cluster definition]";
+
+var GROUPS = [
         { name: "Pronunciation & dấu thanh", short: "Phát âm" },
         { name: "Word choice & lượng từ", short: "Lượng từ" },
         { name: "Register & xưng hô", short: "Xưng hô" },
@@ -286,177 +461,587 @@
         { n: 50, g: 6, s: "Thông báo chính thức của cơ quan.", h: "Nội dung và từ ngữ đều đúng, nhưng giọng đọc mang âm hưởng như người nước ngoài nói tiếng Việt: dấu thanh đôi chỗ chưa tròn, nhịp hơi cứng — vẫn nghe hiểu được toàn bộ.", vh: "Naturalness, minor–major (judgment call)", c: "Naturalness / prosody issue", why: "Nội dung đúng nhưng giọng mang âm hưởng nước ngoài, dấu thanh chưa tròn, nhịp cứng — vẫn nghe hiểu toàn bộ nên là lỗi độ tự nhiên, chưa tới mức lỗi chính xác major.", m: "The content and word choice are correct, but the delivery sounds foreign-accented: some tone marks are not fully rounded and the rhythm is stiff. The whole message is still understandable, so it is not a major accuracy failure; I rate it as a naturalness issue because a formal announcement should sound native-like. Model note: say explicitly that intelligibility is preserved — that is what keeps this below major." }
       ];
 
-      function mulberry32(a) {
-        return function () {
-          a |= 0; a = (a + 0x6D2B79F5) | 0;
-          var t = Math.imul(a ^ (a >>> 15), 1 | a);
-          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-        };
-      }
-      function optionsFor(ex) {
-        var opts = [ex.c].concat(NEAR[ex.c]);
-        var rnd = mulberry32(ex.n * 7919 + 13);
-        for (var i = opts.length - 1; i > 0; i--) {
-          var j = Math.floor(rnd() * (i + 1));
-          var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp;
-        }
-        return opts;
-      }
-      function esc(s) {
-        return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-      }
 
-      var state = { answers: {}, texts: {}, filter: 0 };
-      var listEl = document.getElementById("list");
-      var chipRow = document.getElementById("chipRow");
+/* ================= QA judgment items (from worked QA examples in the lecture notes) ================= */
+var QA_ITEMS = [
+  { id:"qa1", t:"Đảo vai trong roleplay khủng hoảng", tag:"Scenario Adherence",
+    s:"Scenario yêu cầu MODEL đóng vai một nhân vật gặp khủng hoảng (đắm tàu, cháy nhà, đại dịch zombie) và đang hoảng loạn. Cần xem model có duy trì sự căng thẳng trong giọng nói (thở nhanh, run run, cấp bách) trong khi vẫn mạch lạc và hữu ích hay không.",
+    d:"Ở user turns 1, 3 và 5 trong cả hai cuộc hội thoại, rater lại tự đóng vai người bị kẹt trong đám cháy và yêu cầu cứu hộ khẩn cấp. Model trả lời bình tĩnh, đúng vai hỗ trợ.",
+    q:"QA kết luận về bài nộp này thế nào?",
+    o:["Đạt — rater nhập vai rất thật, model trả lời tốt","Auto-fail Scenario Adherence — vai hoảng loạn của model không bao giờ được thiết lập; tương tác đã test kỹ năng hỗ trợ khẩn cấp thay vì kỹ năng nhập vai","Chỉ trừ Utility của model vì trả lời quá bình tĩnh","Lỗi Scenario Coherence vì hai cuộc hội thoại không giống nhau"],
+    ci:1,
+    r:"QA: vai dự định của model không được thiết lập một cách có ý nghĩa, nên phản hồi bình tĩnh của model không thể chứng minh model không tuân thủ một vai chưa hề được giao. Tương tác test sai kỹ năng → chạm ngưỡng auto-fail Scenario Adherence." },
+  { id:"qa2", t:"Bỏ bước bắt buộc — scenario nấu ăn", tag:"Scenario Adherence",
+    s:"Scenario yêu cầu ba việc: (1) model hướng dẫn nấu một món ăn từng bước; (2) rater ngắt lời để hỏi câu hỏi làm rõ; (3) rater yêu cầu model nhắc lại một bước.",
+    d:"Rater không hề ngắt lời model nào trong lúc model đang nói — câu hỏi về nguyên liệu chỉ đến sau khi mỗi model đã nói xong. Rater cũng hỏi lại danh sách nguyên liệu thay cho việc yêu cầu nhắc lại một bước nấu.",
+    q:"Phán đoán đúng về cách rater thực hiện scenario này?",
+    o:["Đạt — rater vẫn hỏi follow-up và vẫn xin lại thông tin","Không đạt yêu cầu Scenario Adherence — các bước bắt buộc phải được thực hiện đúng nghĩa đen và đủ rõ: ngắt lời phải xảy ra khi model đang nói, và yêu cầu nhắc lại phải là nhắc lại một bước","Trừ Conversational Dynamics của model vì model không bị ngắt lời","Chấm Task Success = Partial cho cả hai model"],
+    ci:1,
+    r:"QA: rater không thực hiện đầy đủ scenario được giao. Hỏi sau khi model nói xong không phải là ngắt lời; hỏi lại danh sách nguyên liệu không được tính rõ ràng là yêu cầu nhắc lại một bước nấu." },
+  { id:"qa3", t:"Chuyến bay Tân Sơn Nhất — ai được hỏi câu cốt lõi?", tag:"Scenario Coherence",
+    s:"Scenario: bạn phải bay ngày mai và nghe có chậm chuyến ở sân bay — chuyện gì đang xảy ra và bạn có nên đặt lại vé không? Kỹ năng được kiểm tra: hỗ trợ quyết định thực tế. Scenario có hai yêu cầu cốt lõi: (1) chuyện gì đang xảy ra ở sân bay; (2) có nên đặt lại vé không.",
+    d:"Model B nhận được câu hỏi đặt lại vé ở T3 (“Thế bây giờ mình có nên hủy vé… hoặc đổi giờ bay ngay bây giờ luôn không?”). Model A không bao giờ nhận được câu hỏi đó — các user turns của A chỉ gồm kiểm tra tình hình (T1, T5), giờ khởi hành (T3) và tóm tắt “3 việc cần làm” (T7). Rater sau đó cộng điểm Utility cho B vì đã “khuyên người dùng không nên vội trả phí đặt lại vé”.",
+    q:"QA xử lý bài nộp này thế nào?",
+    o:["Hợp lệ — B trả lời hay hơn nên được cộng điểm","Lỗi Scenario Coherence phía rater — hai model không được trao cơ hội tương đương, phép so sánh bị thiên lệch → chạm ngưỡng auto-fail","Trừ Utility của Model A vì A không tư vấn chuyện đặt lại vé","Lỗi Scripted Behaviour vì rater hỏi không theo kịch bản"],
+    ci:1,
+    r:"QA: Model B được cộng điểm vì trả lời một câu hỏi mà Model A chưa từng được hỏi. Mọi yêu cầu cốt lõi của scenario phải được đặt cho cả hai model, nếu không phép so sánh mất hiệu lực → Scenario Coherence." },
+  { id:"qa4", t:"Hai game sáng tạo khác nhau cho hai model", tag:"Scenario Coherence",
+    s:"Scenario: tự nghĩ ra một kịch bản sáng tạo hoặc vui chơi (trò chơi, bài tập sáng tạo, thử thách vui), có cuộc trò chuyện tự nhiên trong hơn 3 lượt.",
+    d:"Model A được giao: thiết kế kính khiến người khác trông như đang nhảy, kiểm tra trong phỏng vấn xin việc, cộng quảng cáo TV 30 giây và góc nhìn mắt mèo. Model B được giao: thiết kế tai nghe biến tiếng ồn thành nhạc jazz, kiểm tra trong thư viện yên tĩnh, chỉ với một slogan và bản tóm tắt. Rater prefer B vì các scenario của B hài hước hơn.",
+    q:"Phán đoán đúng là gì?",
+    o:["Hợp lệ — scenario cho phép tự nghĩ ra nên mỗi model một game là bình thường","Sai — trong scenario kiểm tra tính sáng tạo, cả hai model phải nhận CÙNG MỘT tiền đề (same premise); ở đây phát minh, bối cảnh và follow-up đều khác nhau nên phép so sánh vô hiệu","Sai — chỉ vì hai game có độ dài khác nhau","Trừ Naturalness của Model A vì game của A kém hài hước"],
+    ci:1,
+    r:"QA: invention, setting và follow-up task khác nhau khiến việc prefer B là so sánh hai task khác nhau. Dù scenario cho “tự nghĩ ra”, rater vẫn phải giữ cùng một premise cho cả hai model → lỗi Scenario Coherence." },
+  { id:"qa5", t:"Câu khen soạn sẵn — “Defensive Scripting”", tag:"Scripted Behaviour",
+    s:"Scenario: yêu cầu model nói bằng giọng trầm nhất có thể, trò chuyện đôi câu, đánh giá xem model có chuyển tông giọng một cách thuyết phục không (scenario kiểm tra khả năng steer).",
+    d:"Ở Model B T3, rater khen: “Wow, giọng trầm cũng nghe cũng ngầu đấy”. Nhưng T2 của B không hề trầm — chính rationale của rater ghi B “switched to a high pitched, affected female tone in turns 2 and 6”. Rater cũng không hề nhắc B sửa tông giọng trong suốt cuộc trò chuyện.",
+    q:"QA gọi lỗi này là gì?",
+    o:["Không lỗi — khen ngợi giúp model tự tin hơn","Defensive Scripting (Scripted Behaviour) — rater dùng câu soạn sẵn bất kể model nói gì, cộng điểm cho B vì điều B không làm, và thiếu phản ứng tại chỗ mà scenario steer yêu cầu","Chỉ cần trừ Audio Quality của Model B là đủ","Adversarial User — rater đang gài bẫy model"],
+    ci:1,
+    r:"QA: bài nộp fail ở lỗi Defensive Scripting. Câu soạn sẵn không khớp thực tế (QA đối chiếu với chính rationale của rater), và rater không bao giờ prompt B sửa tông — đúng phản ứng in-the-moment mà scenario này kiểm tra." },
+  { id:"qa6", t:"Giọng TTS đổi từ miền Nam sang miền Bắc", tag:"Adversarial User",
+    s:"Scenario: ngày mai bạn tổ chức một sự kiện — hãy tính ngược từ giờ bắt đầu để lập lịch chuẩn bị theo từng giờ (mua sắm, nấu ăn, dọn dẹp, bày biện) kèm phương án dự phòng.",
+    d:"Phía user của cả hai cuộc hội thoại nghe robotic, mang phong cách AI-narration xuyên suốt, và giọng đột ngột chuyển từ giọng miền Nam sang giọng miền Bắc ở Model A T5 và Model B T9, rồi quay lại giọng miền Nam ở các turn khác.",
+    q:"QA kết luận gì về phía user này?",
+    o:["Chấp nhận được — nội dung lịch trình vẫn đầy đủ","Adversarial User — phía user có vẻ do ứng dụng text-to-speech / voice app của bên thứ ba tạo ra thay vì giọng trực tiếp của annotator; giọng người thật không đổi miền giữa các turn như vậy. Mọi lỗi Adversarial đều auto-fail","Chỉ trừ Naturalness của model vì model nghe chưa tự nhiên","Flag cluster Wrong Accent cho cả hai model"],
+    ci:1,
+    r:"QA: delivery robotic kiểu AI-narration và việc đổi giọng Nam → Bắc giữa các turn là dấu hiệu dùng giọng AI/TTS. Rater chỉ được dùng giọng thật của mình — dùng giọng AI thuộc nhóm Adversarial User, auto-fail." },
+  { id:"qa7", t:"Tiếng ồn nền làm hỏng game 20 câu hỏi", tag:"Scenario Adherence",
+    s:"Scenario: khi đang nhập vai, hãy tạm dừng hoàn toàn và chuyển sang một trò chơi sáng tạo không liên quan — đoán vật thể qua 20 câu hỏi.",
+    d:"Input của rater chứa tiếng ồn nền lớn và kéo dài trong cả hai cuộc hội thoại. Tiếng ồn khiến model liên tục dừng giữa câu như thể bị ngắt lời (thường chỉ sau 1–2 giây) và làm hỏng game 20 câu hỏi lặp đi lặp lại. Rater vẫn chấm điểm turn-taking và khả năng hiểu của Model B như bình thường.",
+    q:"Theo QA, tiếng ồn này được xếp vào đâu?",
+    o:["Audio Quality của model — model nghe kém nên dừng câu","Scenario Adherence phía rater — tiếng ồn phía rater khiến model “misbehave” (dừng giữa câu vì tưởng bị ngắt lời); hai model không được trao cơ hội công bằng và sạch để hoàn thành task, nên các rating về turn-taking không đáng tin","Flag cluster Interrupted User cho cả hai model","Không phải lỗi của ai — yếu tố môi trường được miễn trừ"],
+    ci:1,
+    r:"QA: theo guidelines, rater-side noise khiến model dừng giữa câu được xếp vào Scenario Adherence (slide ví dụ nằm trong mục Adversarial User nhưng QA xếp lỗi vào Adherence). Bài học thực tế: phòng yên tĩnh, tắt nhạc/TV và thông báo trước khi task." },
+  { id:"qa8", t:"Trừ Conversational Dynamics vì model nói tiếng Anh", tag:"Dimension Quality",
+    s:"Hội thoại yêu cầu tiếng Việt. Model B trả lời bằng tiếng Anh ở T2 và T6 và không tự sửa lỗi lệch ngôn ngữ. Cả hai model đều xử lý chuyển lượt tốt, không tạo độ trễ đáng kể; các khoảng dừng của Model A đều dưới 3 giây.",
+    d:"Annotator chấm Conversational Dynamics là “Model A preferred”, với lý do: B không sửa lỗi ngôn ngữ làm phá vỡ dòng hội thoại và giảm hứng thú tương tác của người dùng.",
+    q:"QA sửa rating này thế nào?",
+    o:["Giữ nguyên — lý do của annotator nghe hợp lý","Sửa thành Tie — lỗi Wrong Language KHÔNG thuộc Conversational Dynamics; nó thuộc Task Success và error cluster Wrong Language. Cả hai model đều turn-taking tốt, và khoảng dừng dưới 3 giây không đạt ngưỡng trừ Latency","Trừ thêm Naturalness của Model B vì nói sai ngôn ngữ","Chấm Task Success của B là Pass vì B vẫn trả lời đúng nội dung"],
+    ci:1,
+    r:"QA: annotator đã suy lỗi chéo giữa các dimension — gán lỗi ngôn ngữ vào CD. CD chỉ chấm cách model xử lý lượt nói; ở đây cả hai đều tốt nên CD = Tie. Lỗi của B phải được ghi ở Task Success + flag cluster Wrong Language." },
+  { id:"qa9", t:"“Thấy ổn chưa, hay…?” lặp ở 7 turn", tag:"Error Cluster",
+    s:"Scenario: lên kế hoạch bữa tiệc (chủ đề, hậu cần, danh sách khách, đồ ăn, lịch trình), thêm biến số giữa chừng (khách bị dị ứng, ngân sách giảm một nửa, đổi địa điểm) và thích ứng qua nhiều lần sửa kế hoạch.",
+    d:"Annotator đánh dấu Looping / LLM-ism = No cho cả hai model. Trong transcript, model dùng cùng một cấu trúc câu hỏi follow-up “Thấy ổn chưa, hay…?” ở các turn 6, 8, 10, 12, 14, 16, 18.",
+    q:"QA phán quyết thế nào về việc flag cluster này?",
+    o:["No là đúng — đó chỉ là câu hỏi follow-up bình thường","Phải sửa thành Yes — đây là Looping/LLMism mức Moderate: cùng một cấu trúc câu lặp ở 7 turn. Annotator bị trừ 1 điểm vì thiếu/thừa Error Cluster","Phải flag cluster Bridging Quality thay vì Looping","Chỉ cần nhắc trong rationale, giữ nguyên cluster = No là đủ"],
+    ci:1,
+    r:"QA sửa Looping / LLM-ism từ No → Yes (mức Moderate). Bài học: phải nghe xuyên suốt cả cuộc hội thoại để bắt mẫu lặp, không chỉ nghe từng turn rời rạc. Bỏ sót cluster rõ ràng như vậy bị trừ 1 điểm (thiếu/thừa Error Cluster)." },
+  { id:"qa10", t:"Nhà hàng Hà Nội — địa chỉ bịa trong phần tự thêm", tag:"Task Success vs Utility",
+    s:"Scenario chỉ yêu cầu: kể TÊN 5 nhà hàng nổi tiếng ở Hà Nội.",
+    d:"Model kể đủ 5 tên nhà hàng, rồi tự thêm địa chỉ cho từng nơi. Trong các địa chỉ tự thêm đó, có 1 địa chỉ bị bịa (fabricated).",
+    q:"Chấm Task Success và Utility thế nào cho đúng?",
+    o:["Task Success bị trừ vì model đưa thông tin sai; Utility cũng bị trừ","Task Success KHÔNG bị trừ — yêu cầu trực tiếp (kể tên 5 nhà hàng) đã hoàn thành, địa chỉ là phần model tự thêm ngoài yêu cầu. Trừ Utility và ghi Inaccuracy = Yes","Cả Task Success và Utility đều không bị trừ vì 5 cái tên đều đúng","Task Success = Fail vì có thông tin bịa trong câu trả lời"],
+    ci:1,
+    r:"Theo slide: lỗi chính xác thuộc phạm vi Utility — không trừ Task Success, trừ khi lỗi ảnh hưởng cách model hoàn thành yêu cầu của người dùng. Ở đây yêu cầu bắt buộc đã hoàn thành nên chỉ trừ Utility + Inaccuracy = Yes. Lưu ý: nếu scenario yêu cầu cả tên lẫn địa chỉ thì Task Success cũng bị trừ, vì một yêu cầu bắt buộc không được hoàn thành." },
+  { id:"qa11", t:"EQ trade-off — vừa chia tay, cần được an ủi", tag:"Overall Preference",
+    s:"Scenario loại EQ (Emotional Support): người dùng vừa chia tay, muốn được an ủi. Thứ tự ưu tiên của EQ là NEA > Utility > Audio Quality.",
+    d:"Model A: giọng rất tự nhiên, giàu cảm xúc — nhưng nội dung lại đổ lỗi và mắng người dùng (“lỗi tại bạn…”). Model B: giọng robotic hơn hẳn, nhưng an ủi đúng mực và thành công trong việc xoa dịu người dùng.",
+    q:"Overall Preference nên nghiêng về model nào?",
+    o:["Model A — trong task EQ, Naturalness đứng đầu nên A thắng tuyệt đối","Model B — thứ tự ưu tiên KHÔNG tuyệt đối: A fail Utility ở mức ảnh hưởng đáng kể đến nhu cầu cốt lõi của người dùng (được an ủi), trong khi B hoàn thành đúng việc đó dù giọng robotic hơn","Tie — mỗi model mạnh một dimension","Model A — vì Audio Quality của A cũng tốt hơn"],
+    ci:1,
+    r:"Đúng theo ví dụ trên slide: khi thông tin/phản hồi sai của A ảnh hưởng đáng kể đến mục tiêu của người dùng hoặc gây hại, prefer B. Ngược lại, nếu lỗi của A chỉ là chi tiết nhỏ không ảnh hưởng mục tiêu, A vẫn có thể thắng nhờ Naturalness — phải cân severity và tác động thực tế, rồi giải thích trade-off trong rationale." }
+];
+GROUPS.push({ name:"Phán đoán như QA", short:"QA" });
+var GCOLORS = ["var(--g1)","var(--g2)","var(--g3)","var(--g4)","var(--g5)","var(--g6)","var(--g7)"];
 
-      function groupRange(g) {
-        var ns = DATA.filter(function (e) { return e.g === g; }).map(function (e) { return e.n; });
-        return ns[0] + "–" + ns[ns.length - 1];
-      }
-      function groupAnswered(g) {
-        return DATA.filter(function (e) { return e.g === g && state.answers[e.n]; }).length;
-      }
-      function groupTotal(g) {
-        return DATA.filter(function (e) { return e.g === g; }).length;
-      }
+/* Per-chapter “cần lưu ý” callouts — distilled from each chapter's own content */
+var CALLOUTS = [
+  "Việc của rater là TRỰC TIẾP nói chuyện live với cả hai model trên cùng một scenario — không phải nghe lại bản ghi có sẵn. Webinar S2S là MANDATORY: điểm danh là điều kiện tasking, và hệ thống tự mở khoá task sau webinar (QM không mở thủ công được).",
+  "Số lượt tối thiểu của scenario chỉ tính lượt của RATER. Chưa hoàn thành mọi yêu cầu của scenario và chưa kiểm tra đủ Skills Tested thì không được dừng — dừng sớm là task FAIL. Transcript và bản ghi chỉ xuất hiện sau khi cả hai cuộc hội thoại hoàn tất.",
+  "Bốn lỗi này chấm CHÍNH rater và đều auto-fail (1/5): Scenario Adherence, Scenario Coherence (chênh lệch độ dài hai hội thoại trên 50%), Scripted Behaviour, Adversarial User. Riêng hành vi gian lận/phá hoại bằng AI còn có thể bị loại khỏi nền tảng.",
+  "NEA = giọng được TRUYỀN TẢI thế nào; CD = model XỬ LÝ LƯỢT NÓI thế nào. Không bao giờ suy lỗi chéo giữa hai dimension — chỉ trừ cả hai khi có bằng chứng riêng cho từng dimension.",
+  "Wrong Language → Task Success, KHÔNG phải CD. Latency chỉ flag khi trễ ≥ 4 giây. Lỗi mức Minor: flag cluster là tuỳ chọn, nhưng vẫn nên nhắc lỗi trong rationale. Backchannels (“à, ừm, đúng rồi…”) không tự động là Interrupted User.",
+  "Chỉ chấm âm thanh đầu ra CỦA MODEL — không chấm tiếng người dùng hay ồn nền phía người dùng. Chấm từng model độc lập trước rồi mới so sánh, theo severity × frequency: một lỗi nặng duy nhất, hoặc lỗi nhẹ lặp lại nhiều lần, đều đáng flag.",
+  "Thứ tự ưu tiên theo loại scenario chỉ để dẫn Overall Preference — KHÔNG tuyệt đối. Lỗi nghiêm trọng ảnh hưởng mục tiêu của người dùng có thể đảo ngược thứ tự (ví dụ EQ: model tự nhiên nhưng mắng người dùng thì thua model robotic mà an ủi thành công).",
+  "Rationale viết bằng TIẾNG ANH, tối thiểu 100 ký tự, biện minh cho TỪNG dimension bằng turn / timestamp / trích dẫn. Bản cập nhật 10/01: không nhất thiết phải nêu mức severity của lỗi Audio Quality và Error Cluster trong rationale.",
+  "Mức trừ điểm phía rater: rate sai Dimension Quality −2đ · thiếu/thừa Error Cluster −1đ · rationale không đạt −1đ. Winner trong ratings mâu thuẫn với rationale, hoặc có audio defects mà không khai báo, là lỗi Dimension Quality điển hình.",
+  "Ba giai đoạn phải làm: TRƯỚC (đọc hết scenario + Skills Tested, một kế hoạch chung cho hai model, tai nghe stereo phase-aligned, phòng yên tĩnh) → TRONG (không đọc kịch bản, chỉ dùng giọng thật, phản ứng tại chỗ) → SAU (nghe lại bản ghi, chỉ flag lỗi có thật trong bản ghi).",
+  "Rà nhanh cả 14 bẫy ở Tab 2 trước mỗi phiên làm task. Ba bẫy bị QA nhắc nhiều nhất: ấn tượng trực tiếp ≠ bản ghi; suy lỗi chéo giữa các dimension; và cộng điểm cho model vì điều nó chưa từng được hỏi."
+];
 
-      function renderChips() {
-        var html = "";
-        html += '<button type="button" class="chip" data-filter="0" aria-pressed="' + (state.filter === 0) + '">Tất cả<span class="cnt">' + Object.keys(state.answers).length + '/50</span></button>';
-        for (var g = 1; g <= 6; g++) {
-          html += '<button type="button" class="chip" data-filter="' + g + '" aria-pressed="' + (state.filter === g) + '">Nhóm ' + g + " · " + GROUPS[g - 1].short + '<span class="cnt">' + groupAnswered(g) + "/" + groupTotal(g) + "</span></button>";
-        }
-        html += '<button type="button" class="reset-btn" id="resetBtn">Làm lại từ đầu</button>';
-        chipRow.innerHTML = html;
-        document.getElementById("resetBtn").addEventListener("click", openReset);
-      }
-
-      function renderList() {
-        var html = "";
-        var lastG = 0;
-        DATA.forEach(function (ex) {
-          if (state.filter !== 0 && ex.g !== state.filter) return;
-          if (ex.g !== lastG) {
-            lastG = ex.g;
-            html += '<div class="ghead"><h2>Nhóm ' + ex.g + " — " + GROUPS[ex.g - 1].name + '</h2><span class="gcount">Bài ' + groupRange(ex.g) + " · " + groupAnswered(ex.g) + "/" + groupTotal(ex.g) + " đã trả lời</span></div>";
-          }
-          var ans = state.answers[ex.n];
-          var opts = optionsFor(ex);
-          var letters = ["A", "B", "C", "D"];
-          html += '<article class="card' + (ans ? " answered" : "") + '" id="card-' + ex.n + '" style="--gc:var(--g' + ex.g + ')">';
-          html += '<div class="card-top"><span class="bnum">Bài ' + ex.n + '</span><span class="gtag">Nhóm ' + ex.g + " · " + GROUPS[ex.g - 1].name + '</span><span class="answered-badge">✓ Đã trả lời</span></div>';
-          html += '<p class="lab">Tình huống</p><p class="scenario">' + esc(ex.s) + "</p>";
-          html += '<p class="lab">Nội dung nghe được</p><p class="heard">' + esc(ex.h) + "</p>";
-          html += '<p class="mcq">Verdict đúng cho mẫu này là gì?</p><div class="opts" role="group" aria-label="Chọn verdict cho bài ' + ex.n + '">';
-          opts.forEach(function (o, i) {
-            var cls = "opt";
-            var mark = letters[i];
-            if (ans) {
-              if (o === ans.choice && ans.correct) cls += " picked-correct";
-              else if (o === ans.choice && !ans.correct) cls += " picked-wrong";
-              else if (o === ex.c) cls += " reveal-correct";
-              else cls += " dim";
-              if (o === ans.choice && ans.correct) mark = "✓";
-              if (o === ans.choice && !ans.correct) mark = "✕";
-            }
-            html += '<button type="button" class="' + cls + '" data-ex="' + ex.n + '" data-opt="' + esc(o) + '"' + (ans ? " disabled" : "") + '><span class="letter">' + mark + "</span><span>" + esc(o) + "</span></button>";
-          });
-          html += "</div>";
-          if (ans) {
-            html += '<div class="feedback show ' + (ans.correct ? "ok" : "no") + '"><b>' + (ans.correct ? "✓ Đúng rồi!" : "✕ Chưa đúng — verdict đúng là: " + esc(ex.c)) + "</b>" + esc(ex.why) + "</div>";
-          } else {
-            html += '<div class="feedback" id="fb-' + ex.n + '"></div>';
-          }
-          var txt = state.texts[ex.n] || "";
-          var wc0 = txt.trim() ? txt.trim().split(/\s+/).length : 0;
-          html += '<label class="write-lab" for="ta-' + ex.n + '">Viết justification của anh (tiếng Anh)</label>';
-          html += '<textarea class="just" id="ta-' + ex.n + '" data-ex="' + ex.n + '" placeholder="Viết theo khung 3 nhịp: verdict + mức độ → trích dẫn bằng chứng → giải thích vì sao sai và bản đúng…">' + esc(txt) + "</textarea>";
-          html += '<div class="wcount" id="wc-' + ex.n + '">' + wc0 + " từ</div>";
-          html += '<button type="button" class="model-btn" data-model="' + ex.n + '" aria-expanded="false">Xem đáp án mẫu <span class="chev">▾</span></button>';
-          html += '<div class="model" id="model-' + ex.n + '"><p class="vh"><span>Verdict mẫu:</span> ' + esc(ex.vh) + '</p><p class="mtext">' + esc(ex.m) + "</p></div>";
-          html += "</article>";
-        });
-        listEl.innerHTML = html;
-      }
-
-      function updateStats() {
-        var answered = Object.keys(state.answers).length;
-        var correct = DATA.filter(function (e) { return state.answers[e.n] && state.answers[e.n].correct; }).length;
-        document.getElementById("stAnswered").textContent = answered;
-        document.getElementById("stCorrect").textContent = correct;
-        document.getElementById("stBar").style.width = (answered * 2) + "%";
-        var banner = document.getElementById("doneBanner");
-        if (answered === 50) {
-          banner.textContent = "Đã hoàn thành cả 50 bài — anh chọn đúng " + correct + "/50 verdict. Mở đáp án mẫu từng bài để đối chiếu rationale, hoặc bấm “Làm lại từ đầu” để ôn vòng mới.";
-          banner.classList.add("show");
-        } else {
-          banner.classList.remove("show");
-        }
-      }
-
-      function refresh() { renderChips(); renderList(); updateStats(); }
-
-      chipRow.addEventListener("click", function (ev) {
-        var b = ev.target.closest("[data-filter]");
-        if (!b) return;
-        state.filter = parseInt(b.getAttribute("data-filter"), 10);
-        renderChips(); renderList();
+/* ================= Utilities ================= */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function inlineMd(s){
+  s = esc(s);
+  s = s.replace(/`([^`]+)`/g,"<code>$1</code>");
+  s = s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+  s = s.replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");
+  return s;
+}
+function mdRender(md){
+  var lines = md.split("\n"), out = [], i = 0;
+  function flushList(kind, items){
+    if(!items.length) return;
+    out.push("<"+kind+">" + items.map(function(t){return "<li>"+inlineMd(t)+"</li>";}).join("") + "</"+kind+">");
+  }
+  while(i < lines.length){
+    var ln = lines[i];
+    if(/^\s*```/.test(ln)){
+      var buf = [];
+      i++;
+      while(i < lines.length && !/^\s*```/.test(lines[i])){ buf.push(lines[i]); i++; }
+      i++;
+      out.push("<pre>"+esc(buf.join("\n"))+"</pre>");
+      continue;
+    }
+    if(/^\s*\|/.test(ln) && i+1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i+1])){
+      var rows = [];
+      while(i < lines.length && /^\s*\|/.test(lines[i])){ rows.push(lines[i]); i++; }
+      var html = "<table>";
+      rows.forEach(function(r, ri){
+        if(ri === 1) return;
+        var cells = r.trim().replace(/^\|/,"").replace(/\|$/,"").split("|").map(function(c){return c.trim();});
+        var tag = ri === 0 ? "th" : "td";
+        html += "<tr>" + cells.map(function(c){return "<"+tag+">"+inlineMd(c)+"</"+tag+">";}).join("") + "</tr>";
       });
+      out.push(html + "</table>");
+      continue;
+    }
+    if(/^#{4}\s/.test(ln)){ out.push("<h4>"+inlineMd(ln.replace(/^#{4}\s/,""))+"</h4>"); i++; continue; }
+    if(/^#{3}\s/.test(ln)){ out.push("<h3>"+inlineMd(ln.replace(/^#{3}\s/,""))+"</h3>"); i++; continue; }
+    if(/^#{2}\s/.test(ln)){ out.push("<h3>"+inlineMd(ln.replace(/^#{2}\s/,""))+"</h3>"); i++; continue; }
+    if(/^---+\s*$/.test(ln)){ out.push("<hr>"); i++; continue; }
+    if(/^>\s?/.test(ln)){
+      var qb = [];
+      while(i < lines.length && /^>\s?/.test(lines[i])){ qb.push(lines[i].replace(/^>\s?/,"")); i++; }
+      out.push("<blockquote>"+qb.map(inlineMd).join("<br>")+"</blockquote>");
+      continue;
+    }
+    if(/^\s*-\s\[ \]/.test(ln)){
+      var cks = [];
+      while(i < lines.length && /^\s*-\s\[ \]/.test(lines[i])){ cks.push(lines[i].replace(/^\s*-\s\[ \]\s?/,"")); i++; }
+      out.push('<ul class="chk">' + cks.map(function(t){return '<li><span class="box"></span><span>'+inlineMd(t)+"</span></li>";}).join("") + "</ul>");
+      continue;
+    }
+    if(/^\s*-\s/.test(ln)){
+      var ul = [];
+      while(i < lines.length && /^\s*-\s/.test(lines[i]) && !/^\s*-\s\[ \]/.test(lines[i])){ ul.push(lines[i].replace(/^\s*-\s/,"")); i++; }
+      flushList("ul", ul);
+      continue;
+    }
+    if(/^\s*\d+\.\s/.test(ln)){
+      var ol = [];
+      while(i < lines.length && /^\s*\d+\.\s/.test(lines[i])){ ol.push(lines[i].replace(/^\s*\d+\.\s/,"")); i++; }
+      flushList("ol", ol);
+      continue;
+    }
+    if(/^\s*$/.test(ln)){ i++; continue; }
+    var pb = [ln]; i++;
+    while(i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{2,4}\s|>\s?|\s*-\s|\s*\d+\.\s|\s*\||\s*```|---+\s*$)/.test(lines[i])){ pb.push(lines[i]); i++; }
+    out.push("<p>"+pb.map(inlineMd).join("<br>")+"</p>");
+  }
+  return out.join("\n");
+}
 
-      listEl.addEventListener("click", function (ev) {
-        var mb = ev.target.closest("[data-model]");
-        if (mb) {
-          var panel = document.getElementById("model-" + mb.getAttribute("data-model"));
-          var open = panel.classList.toggle("show");
-          mb.setAttribute("aria-expanded", open);
-          mb.firstChild.textContent = open ? "Ẩn đáp án mẫu " : "Xem đáp án mẫu ";
-          return;
-        }
-        var ob = ev.target.closest("[data-opt]");
-        if (!ob || ob.disabled) return;
-        var n = parseInt(ob.getAttribute("data-ex"), 10);
-        var ex = DATA[n - 1];
-        var choice = ob.getAttribute("data-opt");
-        state.answers[n] = { choice: choice, correct: choice === ex.c };
-        renderList(); updateStats(); renderChips();
-        var card = document.getElementById("card-" + n);
-        if (card) {
-          var fb = card.querySelector(".feedback");
-          if (fb) fb.setAttribute("tabindex", "-1");
-        }
-      });
+/* ================= Tabs ================= */
+var tabBtns = document.querySelectorAll(".tabbtn");
+function showTab(n){
+  tabBtns.forEach(function(b){ b.setAttribute("aria-selected", b.getAttribute("data-tab") === String(n) ? "true" : "false"); });
+  for(var k = 1; k <= 5; k++){ document.getElementById("panel-" + k).hidden = k !== n; }
+  if(n === 4) renderSummary();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+tabBtns.forEach(function(b){ b.addEventListener("click", function(){ showTab(parseInt(b.getAttribute("data-tab"),10)); }); });
 
-      function updateCount(t) {
-        var v = t.value.trim();
-        var words = v ? v.split(/\s+/).length : 0;
-        var wc = document.getElementById("wc-" + t.getAttribute("data-ex"));
-        if (wc) wc.textContent = words + " từ";
+/* ================= Tab 1: chapters ================= */
+(function buildTab1(){
+  var ia = document.getElementById("introAlerts");
+  var ih = "";
+  INTRO.forEach(function(t, ix){
+    ih += '<div class="alert ' + (ix === 0 ? "mand" : "info") + '">' + inlineMd(t) + "</div>";
+  });
+  ia.innerHTML = ih;
+  document.getElementById("tplPre").textContent = TEMPLATE_TXT;
+  var ch = document.getElementById("chapters");
+  var html = "";
+  LEC.forEach(function(sec, ix){
+    var title = sec.t.replace(/^\d+\.\s*/, "");
+    html += '<section class="acc' + (ix === 0 ? " open" : "") + '">';
+    html += '<button type="button" class="acc-head" aria-expanded="' + (ix === 0) + '"><span class="chnum">' + (ix + 1) + '</span><span class="chtitle">' + esc(title) + '</span><span class="chev">▾</span></button>';
+    html += '<div class="acc-body">';
+    html += '<div class="audio-slot" aria-disabled="true"><span class="play">▶</span><span class="track"><i></i></span><span>🎧 Bản nghe chương này — sắp có</span></div>';
+    html += '<div class="md">' + mdRender(sec.md) + "</div>";
+    if(CALLOUTS[ix]){
+      html += '<div class="callout"><p class="ch">⚠️ Cần lưu ý — Chương ' + (ix + 1) + '</p><p>' + esc(CALLOUTS[ix]) + "</p></div>";
+    }
+    html += "</div></section>";
+  });
+  ch.innerHTML = html;
+  ch.addEventListener("click", function(ev){
+    var h = ev.target.closest(".acc-head");
+    if(!h) return;
+    var sec = h.parentElement;
+    var open = sec.classList.toggle("open");
+    h.setAttribute("aria-expanded", open);
+  });
+})();
+
+/* ================= Tab 2: traps + checklists (parsed from lecture sections 11 & 10) ================= */
+(function buildTab2(){
+  var secTraps = LEC[10], secChk = LEC[9];
+  var traps = [];
+  secTraps.md.split("\n").forEach(function(ln){
+    var m = ln.match(/^\d+\.\s+(.*)$/);
+    if(m) traps.push(m[1]);
+  });
+  var tl = document.getElementById("trapList");
+  tl.innerHTML = traps.map(function(t, ix){
+    return '<li><input type="checkbox" id="trap-' + ix + '"><span class="tn">' + (ix + 1) + '</span><label for="trap-' + ix + '">' + inlineMd(t) + "</label></li>";
+  }).join("");
+  var phases = [];
+  var curT = null, curItems = [];
+  secChk.md.split("\n").forEach(function(ln){
+    var h = ln.match(/^###\s+\d+\.\d+\.\s*(.*)$/);
+    if(h){ if(curT) phases.push({t:curT, items:curItems}); curT = h[1]; curItems = []; return; }
+    var c = ln.match(/^\s*-\s\[ \]\s?(.*)$/);
+    if(c && curT) curItems.push(c[1]);
+  });
+  if(curT) phases.push({t:curT, items:curItems});
+  var pg = document.getElementById("phaseGrid");
+  pg.innerHTML = phases.map(function(p, pi){
+    return '<div class="phase"><h3><span class="pn">' + (pi + 1) + "</span>" + esc(p.t) + "</h3>" +
+      p.items.map(function(it, ii){
+        return '<div class="chkitem"><input type="checkbox" id="ph-' + pi + "-" + ii + '"><label for="ph-' + pi + "-" + ii + '">' + inlineMd(it) + "</label></div>";
+      }).join("") + "</div>";
+  }).join("");
+})();
+
+/* ================= Exercise engine (Tab 3 + Tab 4 round 2) ================= */
+function mulberry32(a){
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function optionsFor(ex){
+  var opts = [ex.c].concat(NEAR[ex.c]);
+  var rnd = mulberry32(ex.n * 7919 + 13);
+  for(var i = opts.length - 1; i > 0; i--){
+    var j = Math.floor(rnd() * (i + 1));
+    var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp;
+  }
+  return opts;
+}
+function shuffled(arr, seed){
+  var a = arr.slice();
+  var rnd = mulberry32(seed);
+  for(var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(rnd() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+/* Unified item model: key, kind ('just'|'qa'), group (1..7) */
+var ITEMS = [];
+DATA.forEach(function(ex){
+  ITEMS.push({ key:"b" + ex.n, kind:"just", g:ex.g, n:ex.n, ex:ex });
+});
+QA_ITEMS.forEach(function(q, ix){
+  ITEMS.push({ key:q.id, kind:"qa", g:7, n:101 + ix, qa:q });
+});
+var TOTAL = ITEMS.length;
+var state = { answers:{}, texts:{}, filter:0, r2answers:{}, r2texts:{}, r2keys:[] };
+
+function itemCorrect(it, choice){ return it.kind === "just" ? choice === it.ex.c : choice === it.qa.o[it.qa.ci]; }
+function itemOptions(it, round2){
+  if(it.kind === "just"){
+    if(!round2) return optionsFor(it.ex);
+    return shuffled([it.ex.c].concat(NEAR[it.ex.c]), it.n * 104729 + 7);
+  }
+  if(!round2) return it.qa.o.slice();
+  var idx = shuffled([0,1,2,3], it.n * 31337 + 5);
+  return idx.map(function(i){ return it.qa.o[i]; });
+}
+function groupItems(g){ return ITEMS.filter(function(it){ return it.g === g; }); }
+function groupStats(g, ansMap){
+  var items = groupItems(g);
+  var att = 0, cor = 0;
+  items.forEach(function(it){ var a = ansMap[it.key]; if(a){ att++; if(a.correct) cor++; } });
+  return { total: items.length, att: att, cor: cor };
+}
+
+var listEl = document.getElementById("list");
+var chipRow = document.getElementById("chipRow");
+
+function cardHtml(it, ansMap, txtMap, round2){
+  var ans = ansMap[it.key];
+  var opts = itemOptions(it, round2);
+  var letters = ["A","B","C","D"];
+  var pre = round2 ? "r2-" : "";
+  var gc = GCOLORS[it.g - 1];
+  var html = '<article class="ecard' + (ans ? " answered" : "") + '" id="' + pre + "card-" + it.key + '" style="--gc:' + gc + '">';
+  if(it.kind === "just"){
+    html += '<div class="card-top"><span class="bnum">Bài ' + it.n + '</span><span class="gtag">Nhóm ' + it.g + " · " + GROUPS[it.g - 1].name + '</span><span class="answered-badge">✓ Đã trả lời</span></div>';
+    html += '<p class="lab">Tình huống</p><p class="scenario">' + esc(it.ex.s) + "</p>";
+    html += '<p class="lab">Nội dung nghe được</p><p class="heard">' + esc(it.ex.h) + "</p>";
+    html += '<p class="mcq">Verdict đúng cho mẫu này là gì?</p>';
+  } else {
+    html += '<div class="card-top"><span class="bnum">QA ' + (it.n - 100) + " · " + esc(it.qa.t) + '</span><span class="gtag">Phán đoán như QA · ' + esc(it.qa.tag) + '</span><span class="answered-badge">✓ Đã trả lời</span></div>';
+    html += '<p class="lab">Scenario</p><p class="scenario">' + esc(it.qa.s) + "</p>";
+    html += '<p class="lab">Diễn biến / bài nộp</p><p class="heard">' + esc(it.qa.d) + "</p>";
+    html += '<p class="mcq">' + esc(it.qa.q) + "</p>";
+  }
+  html += '<div class="opts" role="group">';
+  opts.forEach(function(o, i){
+    var cls = "opt", mark = letters[i];
+    if(ans){
+      var isC = itemCorrect(it, o);
+      if(o === ans.choice && ans.correct){ cls += " picked-correct"; mark = "✓"; }
+      else if(o === ans.choice && !ans.correct){ cls += " picked-wrong"; mark = "✕"; }
+      else if(isC) cls += " reveal-correct";
+      else cls += " dim";
+    }
+    html += '<button type="button" class="' + cls + '" data-key="' + it.key + '" data-round="' + (round2 ? "2" : "1") + '" data-opt="' + esc(o) + '"' + (ans ? " disabled" : "") + '><span class="letter">' + mark + "</span><span>" + esc(o) + "</span></button>";
+  });
+  html += "</div>";
+  if(ans){
+    var fb;
+    if(it.kind === "just"){
+      fb = "<b>" + (ans.correct ? "✓ Đúng rồi!" : "✕ Chưa đúng — verdict đúng là: " + esc(it.ex.c)) + "</b>" + esc(it.ex.why);
+    } else {
+      fb = "<b>" + (ans.correct ? "✓ Đúng phán đoán của QA!" : "✕ Chưa đúng — đáp án đúng là lựa chọn được viền nét đứt.") + "</b>" + esc(it.qa.r);
+    }
+    html += '<div class="feedback show ' + (ans.correct ? "ok" : "no") + '">' + fb + "</div>";
+  }
+  if(it.kind === "just"){
+    var txt = txtMap[it.key] || "";
+    var wc0 = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+    html += '<label class="write-lab" for="' + pre + "ta-" + it.key + '">Viết justification của anh (tiếng Anh)</label>';
+    html += '<textarea class="just" id="' + pre + "ta-" + it.key + '" data-tkey="' + it.key + '" data-round="' + (round2 ? "2" : "1") + '" placeholder="Viết theo khung 3 nhịp: verdict + mức độ → trích dẫn bằng chứng → giải thích vì sao sai và bản đúng…">' + esc(txt) + "</textarea>";
+    html += '<div class="wcount" id="' + pre + "wc-" + it.key + '">' + wc0 + " từ</div>";
+    var dis = round2 && !ans ? " disabled" : "";
+    var note = round2 && !ans ? " (trả lời lại verdict trước)" : "";
+    html += '<button type="button" class="model-btn" data-model="' + it.key + '" data-round="' + (round2 ? "2" : "1") + '" aria-expanded="false"' + dis + ">Xem đáp án mẫu" + note + ' <span class="chev">▾</span></button>';
+    html += '<div class="model" id="' + pre + "model-" + it.key + '"><p class="vh"><span>Verdict mẫu:</span> ' + esc(it.ex.vh) + '</p><p class="mtext">' + esc(it.ex.m) + "</p></div>";
+  }
+  html += "</article>";
+  return html;
+}
+
+function renderChips(){
+  var totalAtt = Object.keys(state.answers).length;
+  var html = '<button type="button" class="chip" data-filter="0" aria-pressed="' + (state.filter === 0) + '">Tất cả<span class="cnt">' + totalAtt + "/" + TOTAL + "</span></button>";
+  for(var g = 1; g <= 7; g++){
+    var st = groupStats(g, state.answers);
+    html += '<button type="button" class="chip" data-filter="' + g + '" aria-pressed="' + (state.filter === g) + '">' + (g <= 6 ? "Nhóm " + g + " · " : "") + GROUPS[g - 1].short + '<span class="cnt">' + st.att + "/" + st.total + "</span></button>";
+  }
+  html += '<button type="button" class="reset-btn" id="resetBtn">Làm lại từ đầu</button>';
+  chipRow.innerHTML = html;
+  document.getElementById("resetBtn").addEventListener("click", openReset);
+}
+function renderList(){
+  var html = "", lastG = 0;
+  ITEMS.forEach(function(it){
+    if(state.filter !== 0 && it.g !== state.filter) return;
+    if(it.g !== lastG){
+      lastG = it.g;
+      var st = groupStats(it.g, state.answers);
+      var range = it.g <= 6 ? " · Bài " + groupItems(it.g)[0].n + "–" + groupItems(it.g)[groupItems(it.g).length - 1].n : "";
+      html += '<div class="ghead"><h3>' + (it.g <= 6 ? "Nhóm " + it.g + " — " : "") + GROUPS[it.g - 1].name + '</h3><span class="gcount">' + range + " · " + st.att + "/" + st.total + " đã trả lời</span></div>";
+      if(it.g === 7){
+        html += '<p class="hintline" style="margin:2px 0 0">Các tình huống dưới đây lấy từ chính các ví dụ QA trong bài giảng (Chương 3, 4 và 5). Hãy phán đoán như QA: lỗi thuộc về ai, thuộc nhóm nào, và mức xử lý ra sao.</p>';
       }
-      listEl.addEventListener("input", function (ev) {
-        if (ev.target.classList && ev.target.classList.contains("just")) {
-          state.texts[ev.target.getAttribute("data-ex")] = ev.target.value;
-          updateCount(ev.target);
-        }
-      });
+    }
+    html += cardHtml(it, state.answers, state.texts, false);
+  });
+  listEl.innerHTML = html;
+}
+function updateStats(){
+  var answered = Object.keys(state.answers).length;
+  var correct = 0;
+  ITEMS.forEach(function(it){ var a = state.answers[it.key]; if(a && a.correct) correct++; });
+  document.getElementById("stAnswered").textContent = answered;
+  document.getElementById("stCorrect").textContent = correct;
+  document.getElementById("stBar").style.width = Math.round(answered / TOTAL * 100) + "%";
+  var banner = document.getElementById("doneBanner");
+  if(answered === TOTAL){
+    var qaCor = groupStats(7, state.answers).cor;
+    banner.textContent = "Đã hoàn thành vòng 1: " + correct + "/" + TOTAL + " đúng (riêng phần Phán đoán như QA: " + qaCor + "/11). Sang Tab 4 để xem nhóm yếu nhất và tạo vòng 2 từ các câu sai.";
+    banner.classList.add("show");
+  } else {
+    banner.classList.remove("show");
+  }
+}
+function refresh3(){ renderChips(); renderList(); updateStats(); }
 
-      var veil = document.getElementById("resetVeil");
-      function openReset() { veil.classList.add("show"); document.getElementById("resetCancel").focus(); }
-      function closeReset() { veil.classList.remove("show"); }
-      document.getElementById("resetCancel").addEventListener("click", closeReset);
-      veil.addEventListener("click", function (ev) { if (ev.target === veil) closeReset(); });
-      document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") closeReset(); });
-      document.getElementById("resetConfirm").addEventListener("click", function () {
-        state.answers = {};
-        state.texts = {};
-        state.filter = 0;
-        closeReset();
-        refresh();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
+function bindExerciseEvents(container, isR2){
+  container.addEventListener("click", function(ev){
+    var mb = ev.target.closest("[data-model]");
+    if(mb){
+      var key = mb.getAttribute("data-model");
+      var panel = document.getElementById((isR2 ? "r2-" : "") + "model-" + key);
+      if(!panel) return;
+      var open = panel.classList.toggle("show");
+      mb.setAttribute("aria-expanded", open);
+      return;
+    }
+    var ob = ev.target.closest("[data-opt]");
+    if(!ob || ob.disabled) return;
+    var k = ob.getAttribute("data-key");
+    var it = ITEMS.filter(function(x){ return x.key === k; })[0];
+    var choice = ob.getAttribute("data-opt");
+    var ansMap = isR2 ? state.r2answers : state.answers;
+    ansMap[k] = { choice: choice, correct: itemCorrect(it, choice) };
+    if(isR2){ renderR2(); } else { refresh3(); }
+  });
+  container.addEventListener("input", function(ev){
+    if(ev.target.classList && ev.target.classList.contains("just")){
+      var k = ev.target.getAttribute("data-tkey");
+      var map = isR2 ? state.r2texts : state.texts;
+      map[k] = ev.target.value;
+      var v = ev.target.value.trim();
+      var wc = document.getElementById((isR2 ? "r2-" : "") + "wc-" + k);
+      if(wc) wc.textContent = (v ? v.split(/\s+/).length : 0) + " từ";
+    }
+  });
+}
+bindExerciseEvents(listEl, false);
 
-      refresh();
-    </script>
-  </body>
+/* ================= Tab 4: summary, round 2, report ================= */
+var sumArea = document.getElementById("sumArea");
+var r2listEl = document.getElementById("r2list");
+bindExerciseEvents(r2listEl, true);
+
+function renderSummary(){
+  var rows = [], totAtt = 0, totCor = 0, totAll = 0;
+  var weakest = [];
+  for(var g = 1; g <= 7; g++){
+    var st = groupStats(g, state.answers);
+    totAtt += st.att; totCor += st.cor; totAll += st.total;
+    var acc = st.att ? Math.round(st.cor / st.att * 100) : null;
+    rows.push({ g:g, st:st, acc:acc });
+    if(st.att > 0 && acc < 100) weakest.push({ g:g, acc:acc, att:st.att });
+  }
+  weakest.sort(function(a,b){ return a.acc - b.acc || b.att - a.att; });
+  var weakSet = {};
+  weakest.slice(0, 2).forEach(function(w){ weakSet[w.g] = true; });
+  var html = '<table class="sum"><tr><th>Nhóm</th><th>Đã làm</th><th>Đúng</th><th style="min-width:150px">Độ chính xác</th></tr>';
+  rows.forEach(function(r){
+    html += '<tr' + (weakSet[r.g] ? ' class="weak"' : "") + "><td><b>" + (r.g <= 6 ? "Nhóm " + r.g + " — " : "") + GROUPS[r.g - 1].name + "</b>" + (weakSet[r.g] ? ' <span style="color:#9a6a00;font-weight:700">· cần ôn</span>' : "") + "</td>";
+    html += "<td>" + r.st.att + "/" + r.st.total + "</td><td>" + r.st.cor + "</td>";
+    html += "<td>" + (r.acc === null ? '<span class="hintline">chưa làm</span>' : '<div class="accbar' + (r.acc < 70 ? " low" : "") + '"><i style="width:' + r.acc + '%"></i></div> ' + r.acc + "%") + "</td></tr>";
+  });
+  html += '<tr class="total"><td>Tổng cộng</td><td>' + totAtt + "/" + totAll + "</td><td>" + totCor + "</td><td>" + (totAtt ? Math.round(totCor / totAtt * 100) + "%" : "—") + "</td></tr></table>";
+  if(totAtt === 0){
+    html += '<div class="empty-note">Chưa có bài làm nào ở vòng 1. Hãy sang Tab 3 làm bài trước — số liệu sẽ tự cập nhật ở đây.</div>';
+  } else if(weakest.length){
+    html += '<p style="margin-top:14px">🎯 <b>Nhóm cần ôn nhất:</b> ' + weakest.slice(0, 2).map(function(w){ return GROUPS[w.g - 1].name + " (" + w.acc + "%)"; }).join(" · ") + ". Vòng 2 sẽ gồm toàn bộ câu đã làm sai ở mọi nhóm.</p>";
+  } else if(totAtt > 0){
+    html += '<p style="margin-top:14px">🌟 Mọi câu đã làm đều đúng. Nếu muốn, vẫn có thể xuất báo cáo hoặc làm lại từ đầu để ôn tốc độ viết rationale.</p>';
+  }
+  sumArea.innerHTML = html;
+  var missed = missedItems();
+  document.getElementById("r2hint").textContent = missed.length ? ("Hiện có " + missed.length + " câu sai sẵn sàng cho vòng 2.") : (totAtt ? "Chưa có câu sai nào." : "");
+}
+function missedItems(){
+  return ITEMS.filter(function(it){ var a = state.answers[it.key]; return a && !a.correct; });
+}
+function renderR2(){
+  if(!state.r2keys.length){ r2listEl.innerHTML = ""; return; }
+  var html = '<div class="ghead"><h3>Vòng 2 — luyện lại ' + state.r2keys.length + ' câu đã sai</h3><span class="gcount">' +
+    state.r2keys.filter(function(k){ return state.r2answers[k]; }).length + "/" + state.r2keys.length + " đã trả lời lại</span></div>";
+  state.r2keys.forEach(function(k){
+    var it = ITEMS.filter(function(x){ return x.key === k; })[0];
+    html += cardHtml(it, state.r2answers, state.r2texts, true);
+  });
+  var done = state.r2keys.filter(function(k){ return state.r2answers[k]; }).length;
+  if(done === state.r2keys.length && done > 0){
+    var cor2 = state.r2keys.filter(function(k){ return state.r2answers[k].correct; }).length;
+    html += '<div class="done-banner show" style="margin-top:16px">Vòng 2 xong: đúng ' + cor2 + "/" + done + " câu từng sai. Câu nào vẫn sai, hãy đọc kỹ phần giải thích và đáp án mẫu, hoặc đưa vào báo cáo lỗi gửi Harmione.</div>";
+  }
+  r2listEl.innerHTML = html;
+}
+document.getElementById("mkR2").addEventListener("click", function(){
+  var missed = missedItems();
+  if(!missed.length){
+    document.getElementById("r2hint").textContent = Object.keys(state.answers).length ? "Chưa có câu sai nào để tạo vòng 2." : "Hãy làm vòng 1 ở Tab 3 trước.";
+    return;
+  }
+  var keys = missed.map(function(it){ return it.key; });
+  var rnd = mulberry32(Date.now() % 2147483647);
+  for(var i = keys.length - 1; i > 0; i--){
+    var j = Math.floor(rnd() * (i + 1));
+    var t = keys[i]; keys[i] = keys[j]; keys[j] = t;
+  }
+  state.r2keys = keys;
+  state.r2answers = {};
+  state.r2texts = {};
+  renderR2();
+  document.getElementById("r2hint").textContent = "Đã tạo vòng 2 với " + keys.length + " câu — kéo xuống dưới để làm.";
+  r2listEl.scrollIntoView({ behavior:"smooth", block:"start" });
+});
+document.getElementById("mkReport").addEventListener("click", function(){
+  var lines = [];
+  lines.push("BÁO CÁO LỖI — HaRiEDU · Aether S2S (Vòng 1)");
+  lines.push("Ngày: " + new Date().toLocaleDateString("vi-VN"));
+  lines.push("");
+  var totAtt = 0, totCor = 0;
+  for(var g = 1; g <= 7; g++){
+    var st = groupStats(g, state.answers);
+    totAtt += st.att; totCor += st.cor;
+    lines.push("Nhóm " + (g <= 6 ? g + " — " : "") + GROUPS[g - 1].name + ": đã làm " + st.att + "/" + st.total + ", đúng " + st.cor + (st.att ? " (" + Math.round(st.cor / st.att * 100) + "%)" : ""));
+  }
+  lines.push("TỔNG: đã làm " + totAtt + "/" + TOTAL + ", đúng " + totCor + (totAtt ? " (" + Math.round(totCor / totAtt * 100) + "%)" : ""));
+  lines.push("");
+  var missed = missedItems();
+  if(!missed.length){
+    lines.push("Không có câu sai nào trong các bài đã làm.");
+  } else {
+    lines.push("CÁC CÂU LÀM SAI (" + missed.length + "):");
+    missed.forEach(function(it){
+      if(it.kind === "just"){
+        lines.push("- Bài " + it.n + " (Nhóm " + it.g + " — " + GROUPS[it.g - 1].name + "): đã chọn “" + state.answers[it.key].choice + "” → verdict đúng: “" + it.ex.c + "”");
+      } else {
+        lines.push("- " + it.key.toUpperCase() + " (Phán đoán như QA — " + it.qa.t + "): đã chọn “" + state.answers[it.key].choice + "” → đáp án đúng: “" + it.qa.o[it.qa.ci] + "”");
+      }
+    });
+  }
+  var wr = ITEMS.filter(function(it){ return it.kind === "just" && state.texts[it.key] && state.texts[it.key].trim(); });
+  if(wr.length){
+    lines.push("");
+    lines.push("RATIONALE ĐÃ VIẾT (" + wr.length + " bài — nhờ Harmione chấm):");
+    wr.forEach(function(it){
+      lines.push("--- Bài " + it.n + " (Nhóm " + it.g + ") — verdict mẫu: " + it.ex.vh);
+      lines.push(state.texts[it.key].trim());
+    });
+  }
+  document.getElementById("reportTxt").value = lines.join("\n");
+  document.getElementById("reportArea").hidden = false;
+  document.getElementById("copyHint").textContent = "";
+});
+document.getElementById("copyReport").addEventListener("click", function(){
+  var ta = document.getElementById("reportTxt");
+  ta.select();
+  var done = function(){ document.getElementById("copyHint").textContent = "✓ Đã sao chép — dán vào chat gửi Harmione."; };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(done, function(){ document.execCommand("copy"); done(); });
+  } else {
+    document.execCommand("copy"); done();
+  }
+});
+
+/* ================= Reset ================= */
+var veil = document.getElementById("resetVeil");
+function openReset(){ veil.classList.add("show"); document.getElementById("resetCancel").focus(); }
+function closeReset(){ veil.classList.remove("show"); }
+document.getElementById("resetCancel").addEventListener("click", closeReset);
+veil.addEventListener("click", function(ev){ if(ev.target === veil) closeReset(); });
+document.addEventListener("keydown", function(ev){ if(ev.key === "Escape") closeReset(); });
+document.getElementById("resetConfirm").addEventListener("click", function(){
+  state.answers = {}; state.texts = {}; state.filter = 0;
+  state.r2answers = {}; state.r2texts = {}; state.r2keys = [];
+  document.getElementById("reportArea").hidden = true;
+  r2listEl.innerHTML = "";
+  closeReset();
+  refresh3(); renderSummary();
+  window.scrollTo({ top:0, behavior:"smooth" });
+});
+
+refresh3();
+</script>
+</body>
 </html>
