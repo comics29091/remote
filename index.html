@@ -725,13 +725,14 @@ tabBtns.forEach(function(b){ b.addEventListener("click", function(){ showTab(par
   ia.innerHTML = ih;
   document.getElementById("tplPre").textContent = TEMPLATE_TXT;
   var ch = document.getElementById("chapters");
+  var AUDIO_IDS = ["1F5vI8-dsGjziKlrBrw2phMnFCo6mRX3p", "1VMao5BKjj-8kYAn54Y8bLu8LqAgYvqo5", "1DdH9HfmdJiKmLe3uK8vsIVytCIphtolX", "1o-LFnlWBIs839i76wivYarVDxjgrl2CH", "1sIboxvr1O40R48K06IPIffnyhJhglkP9", "1RNuEI-_N25Ajnw7uRIodM1rjTTyS80mt", "19u7kHNwHxBBzeLGhUEasmUc0U3C-r_Fe", "1tnPT1vame4wRQ267vR2IJqlpG53VlCok", "1D9Xzku7reZIrXYqtn34_6nqwnBbb8aPk", "1ROLzFTNWlBc01-kRN3FTFq8vAsnvCb7_", "1nWJElFAK1KfkKRl_1jfbtL6HVtQGuepF"];
   var html = "";
   LEC.forEach(function(sec, ix){
     var title = sec.t.replace(/^\d+\.\s*/, "");
     html += '<section class="acc' + (ix === 0 ? " open" : "") + '">';
     html += '<button type="button" class="acc-head" aria-expanded="' + (ix === 0) + '"><span class="chnum">' + (ix + 1) + '</span><span class="chtitle">' + esc(title) + '</span><span class="chev">▾</span></button>';
     html += '<div class="acc-body">';
-    html += '<div class="audio-slot" aria-disabled="true"><span class="play">▶</span><span class="track"><i></i></span><span>🎧 Bản nghe chương này — sắp có</span></div>';
+    html += '<div class="audio-slot"><span>🎧 Bản nghe tóm tắt:</span><audio controls preload="none" style="flex:1;min-width:200px" src="https://drive.google.com/uc?export=download&id=' + AUDIO_IDS[ix] + '"></audio></div>';
     html += '<div class="md">' + mdRender(sec.md) + "</div>";
     if(CALLOUTS[ix]){
       html += '<div class="callout"><p class="ch">⚠️ Cần lưu ý — Chương ' + (ix + 1) + '</p><p>' + esc(CALLOUTS[ix]) + "</p></div>";
